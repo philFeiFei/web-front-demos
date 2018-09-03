@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <div id="todo-list-example">
+        <form v-on:submit.prevent="addNewTodo">
+            <label for="new-todo">Add a todo</label>
+            <input type="text" v-model="newTodoText" id="new-todo" placeholder="请输入新增项">
+            <button>新增</button>
+
+        </form>
+
+        <ul>
+            <li is="todo-item" v-for="(todo, index) in todos" :key="todo.id" v-bind:title="todo.title" v-on:remove="todos.splice(index,1)">
+
+            </li>
+
+
+        </ul>
+    </div>
+
+
+    <script>
+        Vue.component(
+            "todo-item", {
+                template: '\
+    <li>\
+      {{ title }}\
+      <button v-on:click="$emit(\'remove\')">Remove</button>\
+    </li>\
+  ',
+                props: ['title']
+            }
+        );
+
+        new Vue({
+            el: "#todo-list-example",
+            data: {
+                newTodoText: "",
+                todos: [
+                    {
+                        id: 1,
+                        title: "这是第一项，懂吗？？？",
+                    },
+                    {
+                        id: 2,
+                        title: "这是第一项，懂吗？？？",
+                    },
+                    {
+                        id: 3,
+                        title: "这是第一项，懂吗？？？",
+                    },
+
+                ],
+                nextTodoId: 4,
+
+            },
+
+            methods: {
+                addNewTodo: function () {
+                    this.todos.push({
+                        id: this.nextTodoId++,
+                        title: this.newTodoText,
+                    });
+                    this.newTodoText = "";
+                }
+            }
+
+
+        });
+
+
+
+    </script>
+
+
+</body>
+
+</html>
