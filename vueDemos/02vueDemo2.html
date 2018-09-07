@@ -22,26 +22,58 @@
 
         </form>
 
-        <ul>
-            <li is="todo-item" v-for="(todo, index) in todos" :key="todo.id" v-bind:title="todo.title" v-on:remove="todos.splice(index,1)">
+        <ol>
+            <li is="todo-item" v-for="(todo, index) in todos" :key="todo.id" v-bind:title="todo.title" v-bind:id="todo.id" v-on:remove="todos.splice(index,1)">
 
             </li>
 
 
-        </ul>
+        </ol>
+    </div>
+
+
+    <div class="app">
+        <ol>
+
+
+            <todo-list v-for="(item, index) in items" :key="item.id" v-bind:todo="item">
+
+
+            </todo-list>
+        </ol>
     </div>
 
 
     <script>
         Vue.component(
+            "todo-list", {
+                props: ['todo'],
+                template: '<li>{{todo.title}}---{{todo.content}}</li>'
+            }
+        );
+        var app = new Vue({
+            el: ".app",
+            data: {
+                items: [
+                    { id: 2222, title: '小明', content: "我们从未放弃" },
+                    { id: 33, title: '小多少度', content: "我愚昧与慕弃" },
+                    { id: 23423, title: '小试试水', content: "挺好听任何" },
+                    { id: 234234, title: '小试试水', content: "他和认同和弃" },
+                ]
+            }
+        });
+
+
+
+        Vue.component(
             "todo-item", {
                 template: '\
     <li>\
-      {{ title }}\
-      <button v-on:click="$emit(\'remove\')">Remove</button>\
+      {{ title }}{{id}}\
+      <button class=\'btn btn -default\' v-on:click="$emit(\'remove\')">Remove</button>\
     </li>\
   ',
-                props: ['title']
+                props: ['id', 'title']
             }
         );
 
