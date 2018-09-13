@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<style>
+    .borderRed {
+        border: 1px solid red;
+    }
+
+    .backBlue {
+        background-color: blue;
+    }
+
+    .fontWeightBold {
+        font-weight: bold;
+    }
+
+    .colorC {
+        color: blue;
+    }
+</style>
+
+<body>
+    <div id="app" style="width:400px;height:400px;" v-bind:class="{borderRed:isRed,backBlue:isBlue}">
+    </div>
+    <div id="app1">
+
+        <myheader v-bind:class="{fontWeightBold:isBold}" :style="mystyle"></myheader>
+    </div>
+
+
+
+    <script>
+
+        var app = new Vue({
+
+            el: "#app",
+            data: {
+                isRed: true,
+                isBlue: false
+            }
+        });
+
+
+
+
+
+        Vue.component('myheader', {
+
+            template: '<p class="colorC">我是头部，我是固定的头部哈哈呵呵呵</p>'
+
+        });
+
+        var app1 = new Vue({
+
+            el: "#app1",
+            data: {
+                mystyle: {
+                    color: 'red',
+                    fontSize: '30px'
+                }
+            },
+            computed: {
+                isBold: function () {
+                    if (this.mystyle.fontSize > '20px') {
+                        return true;
+                    } else {
+                        return false;
+                    }
+
+                }
+            }
+        });
+
+
+    </script>
+
+
+</body>
+
+
+
+
+</html>

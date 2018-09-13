@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p>{{htmlC}}</p>
+        <p v-html="htmlC"></p>
+
+        <p>{{1+1}}</p>
+        <button @click="clickM">点击我试试</button>
+        <a :href="siteW">我是百度</a>
+        <a href="www.baidu.com">我是百度</a>
+        <button :disabled="able">能看到我吗</button>
+    </div>
+
+
+
+
+
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                htmlC: "<span style='color:red'>我是红色的字体，明白吗？</span>",
+                siteW: "http://www.baidu.com",
+                able: true,
+            },
+            methods: {
+                clickM: () => {
+                    alert("我是一个箭头函数。。虽然不会用");
+                }
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>

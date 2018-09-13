@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <div id="app">
+
+        <p>{{message}}</p>
+
+        <p>我是上面的反转信息：{{revertMessage}}</p>
+
+
+        <br>
+
+        <p>first name:{{firstName}}; last name:{{lastName}}</p>
+        <p>full name:{{fullName}}</p>
+
+    </div>
+
+
+
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                message: "abcdefghijkl",
+                firstName: 'li',
+                lastName: 'phil',
+            },
+            computed: {
+                revertMessage: function () {
+                    return this.message.split('').reverse().join('');
+                },
+                fullName: {
+                    get: function () {
+                        return this.lastName + " " + this.firstName;
+                    },
+                    set: function (newFullN) {
+                        var names = newFullN.split(' ');
+                        this.firstName = names[1];
+                        this.lastName = names[0];
+                    }
+
+                }
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>
