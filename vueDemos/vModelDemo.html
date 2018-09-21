@@ -37,10 +37,30 @@
         <blog-post v-for="post in posts" v-bind:key="post.id" v-bind:title="post.title"></blog-post>
     </div>
 
+    <!--动态绑定value-->
+    <br>
+    <h1>--动态绑定value--</h1>
+    <div id="app">
+
+        <input type="radio" v-model="pick" v-bind:value="a"><label for="jack">Jack1</label>
+        <input type="radio" v-model="pick" v-bind:value="b"><label for="jack">Jack2</label>
+        <p>选中的是：{{pick}}</p>
+    </div>
+
 
 
 
     <script>
+
+        var app = new Vue({
+            el: "#app",
+            data: {
+                pick: [],
+                a: "hehehhehe",
+                b: "哈哈哈哈",
+            }
+        });
+
         new Vue({
             el: '#example-3',
             data: {

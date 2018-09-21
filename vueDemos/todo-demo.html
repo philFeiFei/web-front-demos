@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue学习入门---Phil</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <ul id="app">
+        <!--对象的vfor 第二个参数是index  加入vif判断-->
+        <h1>对象的vfor 第二个参数是index 加入vif判断</h1>
+        <li v-for="(item, index) of items" :key="index">
+            <span v-if="index == 0">
+                我是if等于0 {{item.title}}--{{index}}--{{item.id}}--{{item.content}}
+            </span>
+            <span v-else-if="index == 1">
+                我是else if等于1 {{item.title}}--{{index}}--{{item.id}}--{{item.content}}
+            </span>
+            <span v-else>
+                我是else {{item.title}}--{{index}}--{{item.id}}--{{item.content}}
+            </span>
+        </li>
+
+        <!--对象的vfor 第三个参数是index  加入vif判断-->
+        <br>
+        <h1>对象的vfor 第三个参数是index 加入vif判断</h1>
+        <li v-for="(key, value,index) in obj" :key="index">
+            <span v-if="index == 0">
+                我是等于0{{index}} --{{key}} --{{value}}
+            </span>
+            <span v-else-if="index == 1">
+                我是等于1 {{index}} --{{key}} --{{value}}
+            </span>
+            <span v-else>
+
+                {{index}} --{{key}} --{{value}}
+            </span>
+        </li>
+
+        <br>
+        <h1>排序过滤等</h1>
+        <!--排序过滤等-->
+        <li v-for="(n, index) in arr2" :key="index">{{n}}</li>
+
+    </ul>
+
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                items: [
+                    { id: 2222, title: '小明', content: "我们从未放弃" },
+                    { id: 33, title: '小多少度', content: "我愚昧与慕弃" },
+                    { id: 23423, title: '小试试水', content: "挺好听任何" },
+                    { id: 234234, title: '小试试水', content: "他和认同和弃" },
+                ],
+                obj: {
+                    name: "phil",
+                    age: 19,
+                    sex: '男',
+                },
+                arr1: [2, 4, 1, 8, 5, 3, 9, 7],
+            },
+            computed: {
+                arr2: function () {
+                    return this.arr1.filter(function (num) {
+                        return num % 2 === 0;
+                    })
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

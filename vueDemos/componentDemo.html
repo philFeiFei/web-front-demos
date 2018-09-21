@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>phil component demo</title>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <style>
+        .stylediv {
+            border: 1px solid red;
+            font-Weight: bold;
+            font-size: 40px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h3>--Vue.component要在他所属的vue创建前面写，否则创建vue时，发现组件name不存在。--</h3>
+    <p>一个组件的 data 选项必须是一个函数</p>
+    <div id="app">
+        <button-counter></button-counter>
+        <button-counter></button-counter>
+        <button-counter></button-counter>
+
+        <br>
+
+        <h3>----带prop的组件,与vue之间通过prop来建立联系</h3>
+        <div v-bind:style="{fontSize:blogFontsize +'px'}">
+            <blog-post v-on:enlarge-text="blogFontsize +=$event" v-for="(blog, index) in blogs" :key="index" v-bind:blog="blog">我能够进入slot中吗</blog-post>
+        </div>
+
+    </div>
+
+    <script>
+        Vue.component("button-counter", {
+            data: function () {
+                return {
+                    count: 0,
+                }
+            },
+            /*   data: {
+                  count: 0,
+  
+              }, */
+            template: '<button v-on:click="count++">你点击了我{{count}}次!</button>'
+        });
+
+        var blogpost = {
+            props: ['blog', 'styleObj'],//prop可以是对象
+            template: ` 
+                <div >
+                     <h3 > 文章标题是：{{ blog.title }} !!<button v-on:click="$emit('enlarge-text',3)">enlarge blog</button></h3 >
+                    <div class="stylediv" v-html="blog.contnet"> </div > 
+                    <slot></slot>
+                </div >
+                `,
+        };
+
+        var app = new Vue({
+            el: "#app",
+            //局部定义的组件需要在创建的vue中指定使用哪些局部组件。
+            components: {
+                "blog-post": blogpost,
+            },
+            data: {
+                blogFontsize: 12,
+                blogs: [
+                    {
+                        title: "小明的春天来了",
+                        contnet: "我是文章的内容，我的标题是小明的春天来了"
+
+                    },
+                    {
+                        title: "billy的春天来了",
+                        contnet: "我是文章的内容，我的标题是billy的春天来了了"
+
+                    },
+                    {
+                        title: "leon的春天来了",
+                        contnet: "我是文章的内容，我的标题是leon的春天来了"
+
+                    }
+                ],
+                blogs1: [
+                    {
+                        title: "小明的春天来了111",
+                        contnet: "我是文章的内容，我的标题是小明的春天来了"
+
+                    },
+                    {
+                        title: "billy的春天来了111",
+                        contnet: "我是文章的内容，我的标题是billy的春天来了了"
+
+                    },
+                    {
+                        title: "leon的春天来了111",
+                        contnet: "我是文章的内容，我的标题是leon的春天来了"
+
+                    }
+                ]
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        if (false) {
+            tem = 2;
+            console.log(tem); //报错，暂时性死区
+            let tem = 1;
+            console.log(tem);
+        }
+
+        if (true) {
+            var tmp = 5;
+
+            console.log("tmp=" + tmp);
+
+            function f() {
+                console.log("enter");
+                console.log("tmp=" + tmp);
+                if (true) {
+                    console.log("进入复制10" + tmp);
+                    var tmp = 10;//存在变量提升，该函数区域内，未定义此变量之前都是undifined,即使这个if内部走不进来。
+                    //  let tmp = 10;//暂死区域，只有在此if内，声明此emp之后，才有值。
+                }
+                console.log("tmp=" + tmp);
+            }
+            console.log("tmp1=" + tmp);
+            f();
+        }
+
+        if (false) {
+            var s = 'hello';
+
+            for (var i = 0; i < s.length; i++) {
+                console.log(s[i]);
+                console.log(i);
+            }
+
+            console.log(i); // 5
+        }
+
+
+
+
+    </script>
+</body>
+
+</html>
