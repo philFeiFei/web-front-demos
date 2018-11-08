@@ -14,15 +14,20 @@
 
 <body>
     <div id="app1">
-        {{name}}
+        {{name}}-->{{text}}
     </div>
 
 
     <script>
         var obj = { name: "小红" };
         var app1 = new Vue({
-            el: "#app1",
-            data: obj,
+            //el: "#app1",
+            data: {
+                obj,
+                name: obj.name,
+                text: 1,
+            },
+            template: `<div>{{this.text}}</div>`,
 
             beforeCreate() {
                 console.log("beforeCreate:vue创建之前走这个钩子");
@@ -31,11 +36,11 @@
                 console.log("created:vue创建之后走这个钩子");
             },
 
-            beforeMount() {
+            beforeMount() {//指定了el，则才会执行mount
                 console.log("beforeMount");
             },
             mounted() {
-                console.log("mounted");
+                console.log(this.$el, "mounted");
             },
             beforeUpdate() {
                 console.log("beforeUpdate");
@@ -50,10 +55,19 @@
             destroyed() {
                 console.log("destroyed");
             },
+            /* render(h) {
+                console.log(this.$el, "render()");
+                return h('div', {}, this.text);
+            } */
+
         });
-        app1.$watch("name", function (newValue, oldValue) {
+        //app1.$mount("#app1");
+        app1.$watch("text", function (newValue, oldValue) {
             console.log("watch钩子：原来的name是%s,改变后的name是%s", oldValue, newValue);
-        })
+        });
+       /*  setInterval(() => {
+            app1.text += 1
+        }, 2000); */
 
     </script>
 

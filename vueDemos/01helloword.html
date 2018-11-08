@@ -28,7 +28,7 @@
 
 <body>
     <h3>app Hello demo</h3>
-    <div id="app">
+    <div id="app" ref="div">
         {{message}}
     </div>
 
@@ -56,6 +56,48 @@
 
         </ul>
     </div>
+    <table class="table <table class=" table table-{1:striped|sm|bordered|hover|inverse} table-inverse
+        table-responsive">
+        <thead class="thead-inverse|thead-default">
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td scope="row"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td scope="row"></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td scope="row"></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td scope="row"></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+    </table>
 
     <h3>app-4 处理用户输入 v-on demo</h3>
     <div id="app-5">
@@ -80,14 +122,32 @@
             el: "#app",
             data: {
                 message: "Hello,Leo and BIlly,This is Vue world",
-            }
+            },
+            watch: {
+                message: function (newText, oldText) {
+                    console.log(`${newText}:${oldText}`);
+                }
+            },
+
         });
+        app.$on('test', (a, b) => {
+            console.log(`触发了test事件,第一个参数是：${a},第二个参数是：${b},<h1>abc</h1>`);
+        });
+        app.$emit("test", 'aaa', 333);
+        let a = 333;
+        /*  setInterval(() => {
+             a++;
+             app.$emit("test", 'aaa', a);
+         }, 1000); */
+
+
+
         /* var app1 = new Vue({
-            el: "#app",
-            data: {
-                message: "到底是那个值呢",
-            }
-        }); */
+           el: "#app",
+           data: {
+               message: "到底是那个值呢",
+           }
+       }); */
 
         var app2 = new Vue({
             el: "#app-2",

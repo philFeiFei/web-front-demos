@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>测试js入参为function的情况</h1>
+
+    <script>
+        confirm();
+        function confirm() {
+            schConfirm('我是msg', 'func', paraFunc);
+        }
+
+        function schConfirm(msg, func, paraFunc) {
+            console.log(arguments.length);
+            for (var i = 0; i < arguments.length; i++) {
+                console.log(arguments[i]);
+            }
+
+            console.log(msg);
+            paraFunc(func);
+        }
+
+        function paraFunc(aa) {
+            console.log("我是paraFunc");
+        }
+
+        function schConfirm(confirmMsg, oncompleteYesFunc) {
+            document.getElementById("schedulingConfirmForm:confirmMsg").innerHTML = confirmMsg;
+            if (typeof oncompleteYesFunc == 'function') {
+                oncompletedYesFunc = oncompleteYesFunc;
+            } else {
+                oncompletedYesFunc = null;
+            }
+        }
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>jsdemo1</title>
+</head>
+
+<body>
+    <p>welcome to jsDemo1</p>
+    <div></div>
+
+    <script>
+        window.color = "red";
+        var o = {
+            color: "blue",
+        }
+        function sayColor(size, weight) {
+            //document.getElementsByTagName("h1")返回的是集合，序列号从0开始获取。
+            document.getElementsByTagName("p")[0].style.color = this.color;
+            document.getElementsByTagName("p")[0].style.fontSize = size + "px";
+            document.getElementsByTagName("p")[0].style.fontWeight = weight;
+            // alert(this.color);
+        }
+        //sayColor.call(o, 55, 600);//call方法类似apply方法，主要作用在于能改变作用域，此时将sayColor作用域限制在了对象o中。
+        sayColor.call(window, 55, 600);
+        var str = sayColor.toString();
+        console.log(str);
+        document.getElementsByTagName("div")[0].innerText = str;
+
+    </script>
+</body>
+
+</html>

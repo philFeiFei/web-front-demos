@@ -42,9 +42,17 @@
     <h1>--动态绑定value--</h1>
     <div id="app">
 
-        <input type="radio" v-model="pick" v-bind:value="a"><label for="jack">Jack1</label>
-        <input type="radio" v-model="pick" v-bind:value="b"><label for="jack">Jack2</label>
+        <input type="radio" v-model="pick" v-bind:value="a" id="jack1"><label for="jack1">Jack1</label>
+        <input type="radio" v-model="pick" v-bind:value="b" id="jack2"><label for="jack2">Jack2</label>
         <p>选中的是：{{pick}}</p>
+
+
+        <label for="jack3">Jack3</label>
+        <input type="radio" id="jack3" name="sex" v-model="sexT" value="jack3">
+        <label for="jack4">Jack4</label>
+        <input type="radio" id="jack4" name="sex" v-model="sexT" value="jack4">
+
+        <input type="text" name="jack" id="bss" :value="sexT"><span>{{sexT}}</span>
     </div>
 
 
@@ -56,8 +64,10 @@
             el: "#app",
             data: {
                 pick: [],
+                pick1: [],
                 a: "hehehhehe",
                 b: "哈哈哈哈",
+                sexT: '',
             }
         });
 

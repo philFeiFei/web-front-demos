@@ -1,0 +1,97 @@
+<p:dataTable value="#{demandValuesAction.minList}" id="DemandValuesDataTable" var="row" paginator="true" rows="#{10}"
+    rowsPerPageTemplate="10,,20,50" reflow="true" paginatorTemplate="Page {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}  Page Size {RowsPerPageDropdown}"
+    render="DemandValuesScroller" scrollable="true" scrollHeight="350" enableContextMenu="false" onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+    onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
+
+    <p:columnGroup type="header">
+
+        <p:row>
+            <p:column styleClass="column0" width="5%">
+                <f:facet name="header"></f:facet>
+            </p:column>
+            <p:column width="20%" styleClass="column1" filterBy="#{row.orgName}" sortBy="#{row.orgName}">
+
+                <f:facet name="header">#{messages['STATIC_LABEL.ORG_NAME']}</f:facet>
+            </p:column>
+            <p:column width="25%" styleClass="column0" filterBy="#{row.jobClassName}" sortBy="#{row.jobClassName}">
+
+                <f:facet name="header">#{i19n.translate('elm.base.ejc')}</f:facet>
+            </p:column>
+            <p:column width="12%" styleClass="column1" filterBy="#{formatters.dateOnlyWithEFormat.format(row.startDate)}"
+                sortBy="#{row.startDate}">
+
+                <f:facet name="header">#{messages['STATIC_LABEL.START_DATE']}</f:facet>
+            </p:column>
+            <p:column width="12%" styleClass="column0" filterBy="#{formatters.dateOnlyWithEFormat.format(row.endDate)}"
+                sortBy="#{row.endDate}">
+
+                <f:facet name="header">#{messages['STATIC_LABEL.END_DATE']}</f:facet>
+            </p:column>
+
+            <p:column styleClass="column1" width="14%">
+                <f:facet name="header">#{messages['STATIC_LABEL.TIME_RANGE']}</f:facet>
+            </p:column>
+            <p:column styleClass="column0" width="10%">
+                <f:facet name="header">#{messages['STATIC_LABEL.VALUE']}</f:facet>
+            </p:column>
+
+            <p:column styleClass="column1" width="10%" rendered="#{debug}">
+            </p:column>
+        </p:row>
+    </p:columnGroup>
+    <p:column style="text-align:center">
+        <h:selectBooleanCheckbox value="#{row.checked}" />
+    </p:column>
+    <p:column style="text-align:left">
+        #{row.orgName}
+    </p:column>
+    <p:column style="text-align:left">
+        #{row.jobClassName}
+    </p:column>
+    <p:column style="text-align:center;">
+        #{formatters.dateOnlyWithEFormat.format(row.startDate)}
+    </p:column>
+    <p:column style="text-align:center;">
+        #{formatters.dateOnlyWithEFormat.format(row.endDate)}
+    </p:column>
+
+    <p:column style="text-align:center; padding: 0 0 0 0;">
+        <ui:repeat value="#{row.demandValuesList}" var="os" varStatus="rkv">
+            <s:decorate rendered="#{!(rkv.last)}">
+                <div style="width: 100%; height: 20px; line-height: 20px; border-style: solid; border-color: #C0C0C0; border-width: 0px 0px 1px 0px; color: black; font-weight: normal;">
+                    #{os.startOffsetName}-#{os.endOffsetName}</div>
+            </s:decorate>
+            <s:decorate rendered="#{rkv.last}">
+                <div style="width: 100%; height: 20px; line-height: 20px; border-style: solid; border-color: #C0C0C0; border-width: 0px 0px 0px 0px; color: black; font-weight: normal;">
+                    #{os.startOffsetName}-#{os.endOffsetName}</div>
+            </s:decorate>
+        </ui:repeat>
+    </p:column>
+    <p:column style="text-align:center;padding: 0 0 0 0;">
+        <ui:repeat value="#{row.demandValuesList}" var="os" varStatus="rkv">
+            <s:decorate rendered="#{!rkv.last}">
+                <div style="width: 100%; height: 20px; line-height: 20px; border-style: solid; border-color: #C0C0C0; border-width: 0px 0px 1px 0px; color: black; font-weight: normal;">#{os.paramValue}</div>
+            </s:decorate>
+            <s:decorate rendered="#{rkv.last}">
+                <div style="width: 100%; height: 20px; line-height: 20px; border-style: solid; border-color: #C0C0C0; border-width: 0px 0px 0px 0px; color: black; font-weight: normal;">#{os.paramValue}</div>
+            </s:decorate>
+        </ui:repeat>
+    </p:column>
+
+    <p:column style="text-align:center" rendered="#{debug}">
+        <a4j:commandLink style="text-decoration: unset;" title="#{messages['STATIC_LABEL.VIEW']}" render="WeekEditMP"
+            execute="@this" oncomplete="#{rich:component('WeekEditMP')}.show();" action="#{demandValuesEditAction.editDemandValuesDayMode(row,'MIN','3')}">
+            <i class="fas fa-arrow-right" style="font-size: 18px;"></i>
+        </a4j:commandLink>
+        <h:graphicImage value="/2018/img/blank.png" width="10px" />
+        <a4j:commandLink title="#{messages['STATIC_LABEL.EDIT']}" style="text-decoration: unset;" render="WeekEditMP,DVForm"
+            execute="@this" oncomplete="#{rich:component('WeekEditMP')}.show();" action="#{demandValuesEditAction.editDemandValuesDayMode(row,'MIN','2')}">
+            <i class="far fa-edit" style="color: #028f98;font-size: 18px;"></i>
+        </a4j:commandLink>
+        <h:graphicImage value="/2018/img/blank.png" width="10px" />
+        <a4j:commandLink title="#{messages['STATIC_LABEL.DELETE']}" style="text-decoration: unset;" execute="@this"
+            onclick="if(!confirmDeleteDemandValues()){return false ;}" render="minListForm" action="#{demandValuesEditAction.deleteDemandValuesDayMode(row,'MIN')}">
+            <i class="far fa-trash-alt" style="color: #df2121;font-size: 18px;"></i>
+        </a4j:commandLink>
+    </p:column>
+</p:dataTable>

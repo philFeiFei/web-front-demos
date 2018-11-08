@@ -17,41 +17,51 @@
     <div id="app">
 
         <p>{{message}}</p>
+        <p>data中属性randomData的值对应num4Vue为：{{randomData}}</p>
 
-        <p>我是上面的反转信息：{{revertMessage}}</p>
+        <p>full name + obj.num:{{fullName}}</p>
+        <p>num是：{{number}}</p>
 
+        <p>我是上面的反转信息：{{revertMessage1}}</p>
 
+        <button @click="revertMessage()">随机数产生</button>
         <br>
 
-        <p>first name:{{firstName}}; last name:{{lastName}}</p>
-        <p>full name:{{fullName}}</p>
 
     </div>
 
 
 
     <script>
+        // var num = "123456789";
+        let obj = {
+            num: "123456"
+        }
         var app = new Vue({
             el: "#app",
             data: {
-                message: "abcdefghijkl",
+                t: obj,
+                message: "123456789",
                 firstName: 'li',
                 lastName: 'phil',
+                randomData: obj.num,
             },
             computed: {
-                revertMessage: function () {
-                    return this.message.split('').reverse().join('');
+                revertMessage1: function () {
+                    return obj.num.split('').reverse().join('');
                 },
-                fullName: {
-                    get: function () {
-                        return this.lastName + " " + this.firstName;
-                    },
-                    set: function (newFullN) {
-                        var names = newFullN.split(' ');
-                        this.firstName = names[1];
-                        this.lastName = names[0];
-                    }
-
+                fullName() {
+                    return this.lastName + " " + this.firstName + obj.num;
+                },
+                number() {
+                    return obj.num;
+                }
+            },
+            methods: {
+                revertMessage() {
+                    obj.num = obj.num + "abc";
+                    //this.randomData =obj.num;
+                    console.log("num4Vue=" + obj.num);
                 }
             }
         });
