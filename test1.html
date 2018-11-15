@@ -2,7 +2,16 @@
     rowsPerPageTemplate="10,,20,50" reflow="true" paginatorTemplate="Page {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}  Page Size {RowsPerPageDropdown}"
     render="DemandValuesScroller" scrollable="true" scrollHeight="350" enableContextMenu="false" onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
     onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
-
+    <style>
+        .JobHourDataTable tbody:nth-child(odd) tr>td {
+            background-color: #f6f6f6
+        };
+    
+        .value {
+            z-index: 1;
+            position: relative;
+        }
+    </style>
     <p:columnGroup type="header">
 
         <p:row>

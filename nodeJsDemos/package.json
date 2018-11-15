@@ -4,7 +4,8 @@
   "description": "moust pupular demos",
   "main": "ejsDemo1.js",
   "dependencies": {
-    "ejs": "^2.6.1"
+    "ejs": "^2.6.1",
+    "mockjs": "^1.0.1-beta3"
   },
   "devDependencies": {},
   "scripts": {
