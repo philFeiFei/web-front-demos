@@ -1,284 +1,67 @@
-<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-                             "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
+<html lang="en">
 
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:s="http://jboss.org/schema/seam/taglib" xmlns:ui="http://java.sun.com/jsf/facelets"
-  xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:a="https://ajax4jsf.dev.java.net/ajax"
-  xmlns:rich="http://richfaces.org/rich" xmlns:p="http://primefaces.org/ui" xmlns:a4j="http://richfaces.org/a4j"
-  xmlns:c="http://java.sun.com/jstl/core" template="/2018/layout/template_eas_#{portalAction.getTemplatePC()}.xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    div {
+      width: 500px;
+      height: 275px;
+      border: 1px solid black;
+      background: -webkit-linear-gradient(left, red, green, blue);
+      background: -webkit-linear-gradient(left, red, orange, yellow, green, blue, indigo, violet);
+      background: -webkit-linear-gradient(left, rgba(255, 0, 0, 0), rgba(0, 81, 255, 0.8));
+      background: -webkit-radial-gradient(red, green, blue);
+      background: -webkit-radial-gradient(circle, red, yellow, green);
+      /* Safari 5.1 - 6.0 */
+      /* Safari 5.1 - 6.0 */
+      /* Safari 5.1 - 6 */
+      transition: width 2s, height 2s, transform 2s;
+      -webkit-transition: width 2s, height 2s, -webkit-transform 2s;
+    }
 
+    div:hover {
+      width: 200px;
+      height: 200px;
+      -webkit-transform: rotate(180deg);
+      /* Chrome, Safari, Opera */
+      transform: rotate(180deg);
+    }
 
-  <ui:define name="body">
-    <ui:include src="/2018/scheduling/ScheduleMenu.xhtml" />
+    div#div2 {
+      -webkit-transform: rotate(60deg);
+      transform: rotate(60deg);
+      -ms-transform: rotate(60deg);
+      /* IE 9 */
+      /* Safari and Chrome */
+    }
 
-    <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/2018/js/JqPlot/excanvas.js"></script>
-    <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/2018/js/JqPlot/jquery.jqplot.min.js"></script>
-    <link href="#{facesContext.externalContext.requestContextPath}/2018/js/JqPlot/jquery.jqplot.min.css" rel="stylesheet"
-      type="text/css" />
-    <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/2018/js/JqPlot/jqplot.barRenderer.min.js"></script>
-    <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/2018/js/JqPlot/jqplot.categoryAxisRenderer.min.js"></script>
-    <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/2018/js/JqPlot/jqplot.canvasAxisTickRenderer.min.js"></script>
-    <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/2018/js/JqPlot/jqplot.canvasTextRenderer.min.js"></script>
-    <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/2018/js/JqPlot/jqplot.highlighter.min.js"></script>
-    <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/2018/js/JqPlot/jqplot.pointLabels.min.js"></script>
+    h1 {
+      text-shadow: 5px 5px 5px #FF0000;
+    }
 
-    <script>
-      //change tfoot color
-      function changeTfootColor() {
-        $("tfoot tr td:even").css({
-          "background-color": "#cdeaeb !important",
-          "font-family": "Roboto",
-          "font-size": "14px",
-          "color": "#363d43",
-          "background-image": "none"
-        });
-        $("tfoot tr td:odd").css({
-          "background-color": "#e6f4f4 !important",
-          "font-family": "Roboto",
-          "font-size": "14px",
-          "color": "#363d43",
-          "background-image": "none"
-        });
-      }
+    @font-face {
+      font-family: myFirstFont;
+      src: url(sansation_light.woff);
+    }
 
-    </script>
-    <br />
+    h1 {
+      font-family: myFirstFont;
+    }
+  </style>
+</head>
 
-    <s:decorate id="schmenu2">
-      <script>highlight_link(2, null, 202);</script>
-    </s:decorate>
+<body>
+  <h1>来吧，拥抱太阳，温暖你的怀抱</h1>
+  <div>
+    woshi div
+  </div>
+  <div id="div2">
+    woshi div
+  </div>
+</body>
 
-    <div class="pageHeader">
-      <table style="margin-left: 10px;">
-        <tr>
-          <td>#{i18n.translate('elm.common.scheduling')}</td>
-          <td class="doubleRight"></td>
-          <td> #{i18n.translate('elm.common.staffing')}</td>
-          <td class="doubleRight"></td>
-          <td class="pageHeaderTd">#{i18n.translate('elm.base.elmjobclass')} </td>
-        </tr>
-      </table>
-    </div>
-    <script>
-      function oncompletedByYes() {
-        //schAlert('Re-sync staffing data is done.');
-        #{ rich: component('busyPanel') }.show();
-        document.getElementById("FilterForm:Buttons:ViewButton").click();
-      }
-      function oncompletedByYesButFailed() {
-        schAlert('Meet some errors when re-sync staffing data.');
-      }
-    </script>
-    <div id="chartpseudotooltip"></div>
-    <s:decorate id="messagePanel">
-      <h:messages id="hMessages" globalOnly="true" errorStyle="color: red;" infoStyle="color: gray;" warnStyle="color: green;"
-        fatalStyle="color: black;" />
-    </s:decorate>
-
-    <h:form id="FilterForm">
-      <h:outputText value="#{forecastPositionHoursAction.initQueryPara()}" style="display:none;" />
-      <h:outputText value="#{forecastPositionHoursAction.setDefaultSumInfo()}" style="display:none;" />
-      <rich:collapsiblePanel switchType="client" header="#{i18n.translate('elm.scheduling.common.Filter')}">
-        <s:decorate styleClass="divPanel" id="reduceFocusRefresh">
-          <s:decorate id="StartDec" template="/2018/layout/edit.xhtml">
-            <ui:define name="label">#{i18n.translate('elm.scheduling.common.Week')}<span style="color: red;"> *</span>
-            </ui:define>
-            <h:inputText id="StartDate" value="#{forecastPositionHoursAction.weekDate}" styleClass="filter-box">
-              <f:converter converterId="dateConverter" />
-              <a4j:ajax event="blur" execute="@this" render="StartDate,PosSelectDec" listener="#{forecastPositionHoursAction.adjustWeekDate()}"></a4j:ajax>
-            </h:inputText>
-            <a4j:commandButton tabindex="12" id="calendarButton" styleClass="filter-week-icon" action='#{calendarAction.setModalCalendar(forecastPositionHoursAction.weekDate, "FilterForm:reduceFocusRefresh:StartDec:StartDate", true, false,0, schedulingTool.getCalendarSelectDayNum(), false,null,null)}'
-              image="/2018/img/backcal1.png" oncomplete="#{rich:component('panelCalender')}.show();" render="calModelPane" />
-          </s:decorate>
-
-          <s:decorate id="orgSelectDec" template="/2018/layout/org.xhtml">
-            <ui:define name="label">#{i18n.translate(schedulingTool.getOrgColNameBySysTypeRaw())}
-              <span style="color: red;"> *</span>
-            </ui:define>
-
-            <ui:define name="orgSelect">
-              <h:outputText value="#{i18n.translate('elm.scheduling.msg.NoOrgSelected')}" style="color: red;" rendered="#{!schedulingConfiguration.viewLevelIsDept() &amp;&amp; (forecastPositionHoursAction.sdeptIds== null || forecastPositionHoursAction.sdeptIds=='')}" />
-              <a4j:commandLink execute="@this" action="#{reduceFocusTool.setDisplaySelectedOrgList(forecastPositionHoursAction.selectedSubDeptList)}"
-                value="#{forecastPositionHoursAction.selectedSubDeptList.size()} #{i18n.translate('elm.scheduling.common.subdepartments')} #{i18n.translate('elm.scheduling.msg.Selected')}"
-                oncomplete="#{rich:component('ReduceFocusToolOrgDetailsMP')}.show()" render="ReduceFocusToolOrgDetailsMPForm"
-                rendered="#{!schedulingConfiguration.viewLevelIsDept() &amp;&amp; forecastPositionHoursAction.selectedSubDeptList != null &amp;&amp; forecastPositionHoursAction.selectedSubDeptList.size() > 1}" />
-              <h:outputText value="#{forecastPositionHoursAction.selectedSubDeptList.get(0).getName()}" style="position:relative;"
-                rendered="#{!schedulingConfiguration.viewLevelIsDept() &amp;&amp; forecastPositionHoursAction.selectedSubDeptList.size() == 1}" />
-
-              <h:outputText readonly="true" value="#{i18n.translate('elm.scheduling.msg.NoOrgSelected')}" style="color: red;"
-                rendered="#{schedulingConfiguration.viewLevelIsDept() &amp;&amp; (forecastPositionHoursAction.selectedDeptList== null || forecastPositionHoursAction.selectedDeptList.size() == 0)}" />
-              <a4j:commandLink execute="@this" action="#{reduceFocusTool.setDisplaySelectedOrgList(forecastPositionHoursAction.selectedDeptList)}"
-                value="#{forecastPositionHoursAction.selectedDeptList.size()} #{i18n.translate('elm.scheduling.common.subdepartments')} #{i18n.translate('elm.scheduling.msg.Selected')}"
-                oncomplete="#{rich:component('ReduceFocusToolOrgDetailsMP')}.show()" render="ReduceFocusToolOrgDetailsMPForm"
-                rendered="#{schedulingConfiguration.viewLevelIsDept() &amp;&amp; forecastPositionHoursAction.selectedDeptList != null &amp;&amp; forecastPositionHoursAction.selectedDeptList.size() > 1}" />
-
-              <h:outputText value="#{forecastPositionHoursAction.selectedDeptList.get(0).name}" rendered="#{schedulingConfiguration.viewLevelIsDept() &amp;&amp; forecastPositionHoursAction.selectedDeptList.size() == 1}" />
-            </ui:define>
-            <a4j:commandButton tabindex="15" id="orgTreeLink" value="Org Selector" type="image" image="/2018/img/backorg1.png"
-              styleClass="filter-org-icon" action="#{forecastPositionHoursAction.initialSubDeptSelector()}" onclick="#{rich:component('ReduceFocusToolMP')}.show();"
-              render="reduceFocusToolForm" execute="@this" />
-          </s:decorate>
-
-          <s:decorate id="PosSelectDec" template="/2018/layout/org.xhtml">
-            <ui:define name="label">#{i18n.translate('elm.base.elmjobclass')}<span style="color: red;"> *</span>
-            </ui:define>
-            <ui:define name="orgSelect">
-              <h:outputText id="PosName" value="#{jobClassSelectorAction.calJobClasNames(forecastPositionHoursAction.posIds)}" />
-            </ui:define>
-            <a4j:commandButton value="Pos Selector" type="image" image="/2018/img/backorg1.png" styleClass="filter-org-icon"
-              oncomplete="if(#{forecastPositionHoursAction.initEjcSelector()} == false){schAlert('#{i18n.translate('elm.scheduling.msg.PleaseSelect')}' + ' ' + '#{schedulingTool.getOrgColNameBySysType().toLowerCase()}'); return false;} #{rich:component('JobClassSelectorMP')}.show();"
-              render="JobClassSelectorForm" execute="@form" />
-          </s:decorate>
-
-          <s:decorate id="viewModel" template="/2018/layout/edit.xhtml">
-            <ui:define name="label">
-              #{i18n.translate('elm.scheduling.common.DataModel')}
-            </ui:define>
-            <h:selectOneMenu styleClass="selectpicker filterSec" value="#{forecastPositionHoursAction.viewModel}">
-              <f:selectItems value="#{forecastPositionHoursAction.viewDataModelItems}" />
-            </h:selectOneMenu>
-          </s:decorate>
-          <s:decorate id="compareModel" template="/2018/layout/edit.xhtml">
-            <ui:define name="label">
-              #{i18n.translate('elm.scheduling.common.CompareTo')}
-            </ui:define>
-            <h:selectOneMenu styleClass="selectpicker filterSec" value="#{forecastPositionHoursAction.compareModel}">
-              <f:selectItems value="#{forecastPositionHoursAction.compareDataModelItems}" />
-            </h:selectOneMenu>
-          </s:decorate>
-
-          <s:decorate id="dataSource" template="/2018/layout/edit.xhtml">
-            <ui:define name="label">
-              #{i18n.translate('elm.scheduling.common.DisplayBy')}
-            </ui:define>
-            <h:selectOneMenu styleClass="selectpicker filterSec" value="#{forecastPositionHoursAction.dataSource}">
-              <f:selectItem itemValue="2" itemLabel="#{i18n.translate('elm.base.Days')}" />
-              <f:selectItem itemValue="1" itemLabel="#{i18n.translate('elm.scheduling.common.btn.DayPart')}" />
-              <f:selectItem itemValue="0" itemLabel="#{i18n.translate('elm.scheduling.common.Offset')}" />
-            </h:selectOneMenu>
-          </s:decorate>
-
-          <s:decorate id="weekType" template="/2018/layout/edit.xhtml" rendered='false'>
-            <ui:define name="label">
-              Week Type
-            </ui:define>
-            <h:selectOneMenu styleClass="filter-box" value="#{forecastPositionHoursAction.weekType}">
-              <f:selectItems value="#{schedulingTool.getFlexibleWeekTypeList()}" />
-            </h:selectOneMenu>
-          </s:decorate>
-
-          <s:decorate template="/2018/layout/edit.xhtml" id="dayCheckBoxDec">
-            <ui:define name="label">#{i18n.translate('elm.base.Days')}</ui:define>
-            <h:inputText id="daysText" onclick="showSelectBox('daysText', 'FilterForm:reduceFocusRefresh:dayCheckBoxDec:daysCheckBox_panel')"
-              class="daysText" value="#{forecastPositionHoursAction.getSelectDaysLabel()}" style="z-index:1;" readonly="true">
-            </h:inputText>
-            <p:selectCheckboxMenu id="daysCheckBox" value="#{forecastPositionHoursAction.selectedDays}" label=""
-              multiple="true" filter="true" filterMatchMode="startsWith">
-              <f:selectItems value="#{schedulingTool.getGregorianCalDayList()}" />
-              <p:ajax event="change" update="daysText" />
-              <p:ajax event="toggleSelect" update="daysText" />
-            </p:selectCheckboxMenu>
-          </s:decorate>
-
-          <script>
-            $('.selectpicker').selectpicker();
-          </script>
-        </s:decorate>
-
-        <div style="clear: both" />
-        <s:decorate id="Buttons">
-          <table align="center">
-            <tr>
-              <td style="width: 120px; text-align: right">
-                <a4j:commandLink styleClass="submit_form_black_button" action="#{schedulingAlertMPAction.initConfirmMP('forecastPositionHoursAction.reSync','')}"
-                  oncomplete="if(#{forecastPositionHoursAction.checkFilter()} == false){schAlert('#{forecastPositionHoursAction.errorMsg}'); return false;}; schConfirm('Are you sure to re-sync the staffing data? This process may take a little long time, please be patient to wait untill the process is done.');"
-                  execute="@form" rendered="#{easSecuritySession.hasPermission('DDS_STAFFING_SHOW_RE_SYNC')}">
-                  <i class="fas fa-sync-alt"></i>
-                  &nbsp;&nbsp;&nbsp;#{i18n.translate('elm.scheduling.common.btn.ReSync')}
-                </a4j:commandLink>
-              </td>
-              <td style="width: 120px; text-align: right">
-                <a4j:commandLink styleClass="submit_form_black_button" action="#{forecastPositionHoursAction.doQueryOffsetTimePlotStackGraphJqPlot()}"
-                  render="StaffingPlot3MP,StaffingPlot3MPForm" oncomplete="#{rich:component('StaffingPlot3MP')}.show();"
-                  execute="@form" rendered="#{ddsScheduleSession.forecastType != 3}">
-                  <i class="fas fa-chart-line"></i>
-                  &nbsp;&nbsp;&nbsp;#{i18n.translate('elm.scheduling.common.btn.Plot')} </a4j:commandLink>
-              </td>
-              <td style="width: 120px; text-align: right">
-                <a4j:commandLink styleClass="submit_form_black_button" oncomplete="#{rich:component('DayPartMP')}.show();"
-                  render="DayPartMP, DayPartMPForm" execute="@this">
-                  <i class="fas fa-sun"></i>
-                  &nbsp;&nbsp;&nbsp;#{i18n.translate('elm.scheduling.common.btn.DayPart')}
-                </a4j:commandLink>
-              </td>
-              <td style="width: 120px; text-align: right">
-                <a4j:commandLink styleClass="submit_form_button" id="ViewButton" action="#{forecastPositionHoursAction.doQueryOffsetTime()}"
-                  render="messagePanel,DataForm" rendered="true">
-                  <i class="fas fa-arrow-right"></i>
-                  &nbsp;&nbsp;&nbsp;#{i18n.translate('elm.base.view')} </a4j:commandLink>
-              </td>
-            </tr>
-          </table>
-        </s:decorate>
-      </rich:collapsiblePanel>
-    </h:form>
-
-    <rich:panel header="#{i18n.translate('elm.common.labor')} #{i18n.translate('elm.common.task')}">
-      <h:form id="DataForm">
-        <h:outputText value="#{forecastPositionHoursAction.setFilterOffsetTimeList(null)}" style="display:none;" />
-
-        <div class="exportDiv">
-          <h:outputText style="display:none" value="#{exportImplStandard.setExportId('exportDataProvider_ForecastStaffingHours')}" />
-          <table style="margin-right: 0px; margin-left: auto;">
-            <tr>
-              <td style="width: 30px; text-align: right">
-                <a4j:commandLink title="#{i18n.translate('elm.common.print')}" action="#{exportImplStandard.exportPrint()}"
-                  oncomplete="startPrint();" render="printJS" execute="@this">
-                  <i class="fas fa-print printIcon"></i>
-                </a4j:commandLink>
-              </td>
-              <td style="width: 30px; text-align: right">
-                <h:commandLink title="#{i18n.translate('elm.common.pdf')}" action="#{exportImplStandard.exportPdf()}">
-                  <i class="far fa-file-pdf pdfIcon"></i>
-                </h:commandLink>
-              </td>
-              <td style="width: 30px; text-align: right">
-                <h:commandLink title="#{i18n.translate('elm.common.xls')}" action="#{exportImplStandard.exportXls()}">
-                  <i class="far fa-file-excel excelIcon"></i>
-                </h:commandLink>
-              </td>
-              <td style="width: 30px; text-align: right">
-                <h:commandLink title="#{i18n.translate('elm.common.csv')}" action="#{exportImplStandard.exportCsv()}">
-                  <i class="far fa-file-alt csvIcon"></i>
-                </h:commandLink>
-              </td>
-              <td style="width: 5px; text-align: right"></td>
-            </tr>
-          </table>
-        </div>
-
-        <s:decorate id="allRowsTable" rendered="#{!easSecuritySession.hasPermission('DDS_STAFFING_EJC_HOURS_ONLY_15_MIN_SHIFTS_SHOWN')}">
-          <ui:include src="ForecastOffsetTimeViewAllRowsDataTable.xhtml"></ui:include>
-        </s:decorate>
-        <s:decorate id="only15MinOffsetsTable" rendered="#{easSecuritySession.hasPermission('DDS_STAFFING_EJC_HOURS_ONLY_15_MIN_SHIFTS_SHOWN')}">
-          <ui:include src="ForecastOffsetTimeViewOnly15MinOffsetsDataTable.xhtml"></ui:include>
-        </s:decorate>
-        <script>
-          changeTfootColor();
-        </script>
-      </h:form>
-    </rich:panel>
-
-    <ui:include src="/2018/layout/busy.xhtml" />
-    <ui:include src="/2018/scheduling/PrintForStandard.xhtml" />
-    <ui:include src="/2018/layout/cal.xhtml"></ui:include>
-    <ui:include src="/2018/org/OrgSelectorOnFocus.xhtml" />
-    <ui:include src="/2018/scheduling/ReduceFocusToolMP.xhtml"></ui:include>
-    <ui:include src="/2018/scheduling/SchedulingAlertMP.xhtml" />
-    <ui:include src="/2018/empl/JobClassSelectorMPNew.xhtml" />
-    <ui:include src="/2018/scheduling/DayPartsMP.xhtml" />
-    <ui:include src="/2018/scheduling/DdsScheduleEjcCombinationMP.xhtml" />
-    <ui:include src="ForecastOffsetTimeViewByDayPartMP.xhtml" />
-    <ui:include src="ForecastOffsetTimeViewByDayPartOnly15MP.xhtml" />
-    <ui:include src="StaffingPlot3.xhtml" />
-  </ui:define>
-</ui:composition>
+</html>
