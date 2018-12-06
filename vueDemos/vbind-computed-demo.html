@@ -27,23 +27,24 @@
 </style>
 
 <body>
-    <div id="app" style="width:400px;height:400px;" v-bind:class="{borderRed:isRed,backBlue:isBlue}">
+    <div id="app" style="width:400px;height:400px;" v-bind:style="[colorObj,fontObj]">
+        我在div里面
     </div>
-    <div id="app1">
-
-        <myheader v-bind:class="{fontWeightBold:isBold}" :style="mystyle"></myheader>
-    </div>
-
-
-
     <script>
-
         var app = new Vue({
-
             el: "#app",
             data: {
-                isRed: true,
-                isBlue: false
+            },
+            computed: {
+                colorObj() {
+                    return `backgroundColor: yellow`
+                },
+                fontObj() {
+                    return {
+                        fontSize: '20px',
+                        fontWeight: 'bold'
+                    }
+                }
             }
         });
 

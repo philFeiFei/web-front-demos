@@ -13,23 +13,22 @@
     <div></div>
 
     <script>
-        window.color = "red";
-        var o = {
-            color: "blue",
-        }
-        function sayColor(size, weight) {
-            //document.getElementsByTagName("h1")返回的是集合，序列号从0开始获取。
-            document.getElementsByTagName("p")[0].style.color = this.color;
-            document.getElementsByTagName("p")[0].style.fontSize = size + "px";
-            document.getElementsByTagName("p")[0].style.fontWeight = weight;
-            // alert(this.color);
-        }
-        //sayColor.call(o, 55, 600);//call方法类似apply方法，主要作用在于能改变作用域，此时将sayColor作用域限制在了对象o中。
-        sayColor.call(window, 55, 600);
-        var str = sayColor.toString();
-        console.log(str);
-        document.getElementsByTagName("div")[0].innerText = str;
+        var d1 = new Date();
+        setTimeout(() => {
 
+            var d2 = new Date();
+            console.log(parseInt(d2 - d1));//两个时间相差的毫秒数
+            console.log(parseInt(d2 - d1) / 1000);//两个时间相差的秒数
+            console.log(parseInt(d2 - d1) / 1000 / 60);//两个时间相差的分钟数
+            console.log(parseInt(d2 - d1) / 1000 / 60);//两个时间相差的小时数
+        }, 5000);
+
+        function getRefreshToken() { // 刷新token 注意这里用到的service
+            return service.post(proApi.api.refreshUserTokenApi)
+                .then((res) => {
+                    return Promise.resolve(res.data)
+                })
+        }
     </script>
 </body>
 
