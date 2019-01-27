@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>只能录入时间</title>
+
+    <script src="./resource/jquery-3.2.1.js"></script>
+    <script src="./resource/inputMask/jquery.inputmask.bundle.js"></script>
+
+</head>
+
+<body>
+
+    InputMask JS：<input id="dateIM" type="text" onblur="checkTime(3)" />
+
+    <script>
+        $(function () {
+
+            //jquery inputMask demo
+            $("#dateIM").inputmask("datetime", {
+                mask: "h:sA-h:sA",
+                placeholder: "00:00A-00:00P",
+            });
+        });
+
+        function generateOffset(date, dayIndex) {
+            var dateChar = date.substr(5)
+            var dateHourAndMin = date.substr(0, 5)
+            var dateArr = dateHourAndMin.split(':')
+            var hour = dateArr[0];
+            var min = dateArr[1]
+            if (hour > 12) {// main base A or P, not hour
+                hour = hour - 12
+            }
+            var extraHour = 0
+            if (dateChar == 'P') {//if afternoon  aad 12hour again
+                extraHour = 12;
+            }
+            console.log('dayindex-hour-min', dayIndex, hour, min);
+            var offset = (dayIndex * 96) + (hour * 4) + (extraHour * 4)
+                + parseInt(min / 15);
+            return offset;
+        }
+
+        function generateNewDate(date) {
+            var dateChar = date.substr(5)
+            var dateHourAndMin = date.substr(0, 5)
+            var dateArr = dateHourAndMin.split(':')
+            console.log(dateChar, dateArr[0])
+            if (dateArr[0] > 12) {
+                dateArr[0] = dateArr[0] - 12
+            }
+            var newDate = dateArr[0] + ":" + dateArr[1] + dateChar;
+            console.log("newDate", newDate);
+            return newDate;
+        }
+        function checkDate(date) {
+            var dateChar = date.substr(5)
+            if (dateChar != 'A' && dateChar != 'P') {
+                alert('you should enter "A" or "P" at the end of shift');
+                return false;
+            }
+            return true;
+        }
+
+        function checkTime(dayIndex) {
+            var dateStr = $("#dateIM").val();
+            if (!dateStr) {
+                alert("Please enter shift time");
+                return false;
+            }
+            var arr = dateStr.split('-');
+            if (!arr && arr.length < 2) {
+                alert('Please enter right formate shift time');
+                return false;
+            }
+            var date1 = arr[0];
+            var date2 = arr[1];
+            console.log(date1, date2)
+
+            if (!checkDate(date1)) {
+                return false;
+            }
+            var newDate1 = generateNewDate(date1);
+            if (!checkDate(date2)) {
+                return false;
+            }
+            var newDate2 = generateNewDate(date2);
+
+
+            var newDate = newDate1 + '-' + newDate2;
+            console.log('newDate', newDate);
+            $("#dateIM").val(newDate);
+
+            var startOffset = generateOffset(date1, dayIndex)
+            var endOffset = generateOffset(date2, dayIndex)
+            if (startOffset > endOffset) {//means the endoffset is in next day
+                endOffset += 96;
+            }
+            console.log('startOffset', startOffset);
+            console.log('endOffset', endOffset);
+        }
+    </script>
+</body>
+
+</html>
