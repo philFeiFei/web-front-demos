@@ -1,106 +1,371 @@
-<p:dataTable value="#{demandValuesAction.minList}" id="DemandValuesDataTable" var="row" paginator="true" rows="#{10}"
-    rowsPerPageTemplate="10,,20,50" reflow="true" paginatorTemplate="Page {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}  Page Size {RowsPerPageDropdown}"
-    render="DemandValuesScroller" scrollable="true" scrollHeight="350" enableContextMenu="false" onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
-    onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
-    <style>
-        .JobHourDataTable tbody:nth-child(odd) tr>td {
-            background-color: #f6f6f6
-        };
-    
-        .value {
-            z-index: 1;
-            position: relative;
+<table style="width:100%">
+    <tr>
+        <a4j:repeat value="#{schedulingTool.weekDayNumList}" var="dayNum">
+            <td class="col#{dayNum}" onmouseenter="showPasteIcon(this,#{ddsScheduleAddShiftToHrMgrAction.isClipboardOfMasterScheduleEmpty() == false});"
+                onmouseleave="hidePasteIcon(this);" oncontextmenu="(function(event){setRightMenu(#{ddsWallAndLineScheduleMgmtAction.getCanAddVirtualScheduleFromMenu()}, 
+		                #{ddsScheduleAddShiftToHrMgrAction.isClipboardOfMasterScheduleEmpty() == false},
+		                event, #{awwp.weeklySchedule.get(dayNum).size()}, #{awwp.hr.associateId}, #{dayNum});})(event);return false;">
+                <s:div styleClass="wallsch_body_break_left_div_input">
+                    <s:decorate style="height:15px;" rendered="#{(awwp.hr.associateId != null &amp;&amp; ddsWallAndLineScheduleMgmtAction.getCanAddVirtualScheduleFromMenu()) ? true : false}">
+                        <img width="13px" height="13px" src="#{facesContext.externalContext.requestContextPath}/2018/img/schedule.png" />
+                    </s:decorate>
+                </s:div>
+                <div class="inputShiftOutDIv wallsch_body_sch_right_div_input" style="background-color: linen;solid #dcdcdc;">
+                    <div class="inputShiftDIv" style="float: left;width: 59%;">
+                        <h:inputText class="masterShift #{awwp.hr.associateId}_#{dayNum}" rendered="#{(awwp.hr.associateId != null &amp;&amp; ddsWallAndLineScheduleMgmtAction.getCanAddVirtualScheduleFromMenu()) ? true : false}"
+                            style="width: 100%;background-color:  linen;text-align: center; border: 0px solid linen;"
+                            onblur="clearInputTime('#{awwp.hr.associateId}',#{dayNum})" onfocus="initInputTask('#{awwp.hr.associateId}',#{dayNum})"
+                            onkeydown="if(event.keyCode==13){checkTime('#{awwp.hr.associateId}',#{dayNum})}" />
+                        <h:inputText class="#{awwp.hr.associateId}_#{dayNum}_hidden" style="display:none" />
+                    </div>
+                    <s:div rendered="#{(awwp.hr.associateId != null &amp;&amp; ddsWallAndLineScheduleMgmtAction.getCanAddVirtualScheduleFromMenu()) ? true : false}"
+                        styleClass="saveIconDiv #{awwp.hr.associateId}_#{dayNum}_right" style="float: left;">
+                        <i class="far fa-save #{awwp.hr.associateId}_#{dayNum}_saveicon" style="font-size: 12px;color: darkgoldenrod;cursor: hand;position: relative;top: 1px;display:none;"
+                            onclick="checkTimeBySaveIcon('#{awwp.hr.associateId}',#{dayNum})" title="#{i18n.translate('elm.base.save','save')}"></i>
+                    </s:div>
+                    <div style="clear:both"></div>
+                </div>
+
+                <s:div styleClass="pasteIconDiv" rendered="#{awwp.hr != null &amp;&amp; awwp.hr.associateId != null}">
+                    <i class="fas fa-paste" onclick="pasteOnWallByIcon('#{awwp.hr.associateId}',#{dayNum})" title="#{i18n.translate('elm.base.paste','paste')}"></i></s:div>
+                <div style="height:45px" ondrop="drop(event,'#{awwp.hr.associateId}',#{dayNum})" ondragover="allowDrop(event)">
+                    <a4j:repeat value="#{awwp.weeklySchedule.get(dayNum)}" var="sch" rendered="#{awwp.showSchedule(dayNum)}">
+                        <div id="specificSch" onmouseenter="showOperationIcons(this
+                            	, #{ddsWallAndLineScheduleMgmtAction.masterScheduleIdAndEditControlMap.get(sch.masterId).isCanDrag()}
+                                , #{ddsWallAndLineScheduleMgmtAction.masterScheduleIdAndEditControlMap.get(sch.masterId).isCanCopy()}
+                                , #{ddsWallAndLineScheduleMgmtAction.masterScheduleIdAndEditControlMap.get(sch.masterId).isCanDelete()}
+                            )"
+                            onmouseleave="hideOperationIcons(this)">
+                            <s:div rendered="#{ddsWallAndLineScheduleMgmtAction.showWholeShift &amp;&amp; sch.timeDistanceMaster != '' &amp;&amp; sch.hasActualOnly == false}">
+                                <s:div styleClass="wallsch_body_sch_left_div" rendered="#{sch.hasFixedShiftOfMaster &amp;&amp; sch.timeDistanceMaster != ''}">
+                                    <i class="fas fa-thumbtack" style="color: #3BACBC; margin-top: 7px;"></i>
+                                </s:div>
+
+                                <s:div styleClass="wallsch_body_sch_right_div">
+                                    <a style="color: #311b92;" class="wholeShiftLink" href="javascript:showSchedule(#{sch.type}, #{sch.sameWithMaster},#{sch.id},#{sch.masterId},#{dayNum});">
+                                        #{sch.timeDistanceMaster}</a>
+                                </s:div>
+                            </s:div>
+                            <s:div styleClass="wallsch_body_sch_right_div" rendered="#{ddsWallAndLineScheduleMgmtAction.showWholeShift &amp;&amp; sch.timeDistanceMaster !='' &amp;&amp; sch.hasActualOnly == true}">
+                                <s:div>
+                                    <h:outputText value="#{sch.timeDistanceMaster}" style="color:#311b92"></h:outputText>
+                                    <br />
+                                </s:div>
+                            </s:div>
+                            <s:div styleClass="wallsch_body_sch_right_div">
+                                <h:graphicImage value="/2018/img/lockPartWall.png" width="12" height="12" rendered="#{sch.lock == 1}" />
+                                <h:graphicImage value="/2018/img/lockWall.png" width="12" height="12" rendered="#{sch.lock == 2}" />
+                                <h:graphicImage value="/2018/img/email.png" width="12" height="12" rendered="#{sch.posted}" />
+                            </s:div>
+                            <div style="clear:both"></div>
+                            <s:div rendered="#{sch.timeDistance != null &amp;&amp; sch.timeDistance !='' &amp;&amp; sch.hasActualOnly == false}">
+                                <s:div styleClass="wallsch_body_sch_left_div" rendered="#{sch.hasFixedShift}">
+                                    <i class="fas fa-thumbtack" style="color: #3BACBC; margin-top: 7px;"></i>
+                                </s:div>
+
+                                <s:div styleClass="wallsch_body_sch_right_div" style="padding-right: 1px;">
+                                    <div id="#{sch.id}" class="transitionDiv" draggable="true" ondragstart="drag(event,'#{sch.masterId}')">
+                                        <s:div styleClass="transitionDivInner"><a href="javascript:showSchedule(#{sch.type}, #{sch.sameWithMaster},#{sch.id},#{sch.masterId});"
+                                                style="text-decoration: none;#{sch.hasViolation ? 'background-color:Khaki;' : ''}#{sch.type == -1 ? 'color:black;' : sch.outAvailability ? 'color:red;' : ''}">
+                                                #{sch.timeDistance} </a></s:div>
+                                        <s:div styleClass="dragIconDiv" rendered="#{awwp.hr != null &amp;&amp; awwp.hr.associateId != null}"><i
+                                                class="fa fa-arrows-alt" title="Drag"></i></s:div>
+                                    </div>
+                                    <s:div styleClass="deleteIconDiv" rendered="#{awwp.hr != null &amp;&amp; awwp.hr.associateId != null}"><i
+                                            class="fa fa-trash" onclick="deleteTransition('#{sch.masterId}')" title="#{i18n.translate('elm.base.delete','delete')}"></i></s:div>
+                                    <s:div styleClass="copyIconDiv" rendered="#{awwp.hr != null &amp;&amp; awwp.hr.associateId != null}">
+                                        <i class="fa fa-copy" onclick="copyToClipboard('#{sch.masterId}')" title="#{i18n.translate('elm.scheduling.common.copyToClipboard','copy To clipboard')}"></i></s:div>
+                                    <s:div styleClass="copyToManyIconDiv" rendered="#{awwp.hr != null &amp;&amp; awwp.hr.associateId != null}">
+                                        <i class="fas fa-clone" onclick="copyToManyPerAndDays('#{sch.masterId}')" title="#{i18n.translate('elm.base.copy','copy')}"></i></s:div>
+                                </s:div>
+                            </s:div>
+                            <s:div styleClass="wallsch_body_sch_right_div" rendered="#{sch.timeDistance != null &amp;&amp; sch.timeDistance !='' &amp;&amp; sch.hasActualOnly == true}">
+                                <s:div>
+                                    <h:outputText value="#{sch.timeDistance}" style="color:red"></h:outputText>
+                                    <br />
+                                </s:div>
+                            </s:div>
+                            <s:div rendered="#{sch.title !='' &amp;&amp; ddsWallAndLineScheduleMgmtAction.viewJobCode}"
+                                styleClass="wallsch_body_sch_right_div wallsch_body_sch_title">
+                                <a href="javascript:showJobHour4JobCode(#{sch.id}, #{sch.masterId});" style="text-decoration: none;">#{sch.title}</a>
+                                <br />
+                            </s:div>
+
+                            <a4j:repeat value="#{sch.getTransientDdsActualScheduleList()}" var="schact" rendered="#{sch.getTransientDdsActualScheduleList() != null}">
+                                <s:div styleClass="wallsch_body_sch_right_div" rendered="#{schact.transientTimeDistanceActual !=null &amp;&amp;  schact.transientTimeDistanceActual !=''}">
+                                    <h:outputText value="#{schact.transientTimeDistanceActual}" />
+                                    <br />
+                                </s:div>
+                                <s:div styleClass="wallsch_body_sch_right_div" rendered="#{schact.transientTitleActual != null &amp;&amp;  schact.transientTitleActual !=''}">
+                                    <h:outputText value="#{schact.transientTitleActual}" />
+                                    <br />
+                                </s:div>
+                                <s:div styleClass="wallsch_body_sch_right_div" rendered="#{schact.transientPunch != null &amp;&amp;  schact.transientPunch !=''}">
+                                    <h:outputText value="#{schact.transientPunch}" />
+                                    <br />
+                                </s:div>
+                                <s:div styleClass="wallsch_body_sch_right_div" rendered="#{ddsWallAndLineScheduleMgmtAction.viewCost &amp;&amp; ddsWallAndLineScheduleMgmtAction.getHasPermissionSHOWCOST() &amp;&amp; schact.transientCostActual != null &amp;&amp; schact.transientCostActual !=''}">
+                                    <h:outputText value="#{schact.transientCostActual}" />
+                                    <br />
+                                </s:div>
+                            </a4j:repeat>
+                            <div style="clear:both"></div>
+                            <s:div style="height:#{awwp.maxEjcHeight}px" rendered="#{sch.ejcList != null  &amp;&amp; sch.ejcList.size &gt; 0}">
+                                <a4j:repeat value="#{sch.ejcList}" var="ejc" rendered="#{sch.ejcList != null  &amp;&amp; sch.ejcList.size &gt; 0}">
+                                    <s:div styleClass="wallsch_body_sch_right_div">
+                                        <h:outputText value="#{ejc}">
+                                        </h:outputText>
+                                    </s:div>
+                                </a4j:repeat>
+                            </s:div>
+                            <div style="clear:both"></div>
+
+                            <s:div styleClass="wallsch_body_sch_right_div" rendered="#{ddsWallAndLineScheduleMgmtAction.showPayType}">
+                                <h:outputText value="#{sch.payType}" rendered="#{ddsWallAndLineScheduleMgmtAction.checkPayTypeToBeDisplayed(sch.payTypeIns)}">
+                                </h:outputText>
+
+                                <s:div rendered="#{ddsWallAndLineScheduleMgmtAction.checkPayTypeToBeDisplayed(sch.payTypeIns) == false}">
+                                    <a href="javascript:showSchedule(#{sch.type}, #{sch.sameWithMaster},#{sch.id},#{sch.masterId});">
+                                        #{sch.payType} </a>
+                                </s:div>
+                                <br />
+                            </s:div>
+                            <s:div styleClass="wallsch_body_sch_right_div" rendered="#{sch.reasonCode != null &amp;&amp; sch.reasonCode != ''}">
+                                <h:outputText value="#{sch.reasonCode}"></h:outputText>
+                                <br />
+                            </s:div>
+                            <div style="clear:both"></div>
+                            <div>
+                                <s:div styleClass="wallsch_body_sch_left_div costcolor" rendered="#{ddsWallAndLineScheduleMgmtAction.viewCost &amp;&amp; sch.cost != null &amp;&amp; (sch.cost).length() &gt; 0 &amp;&amp; ddsWallAndLineScheduleMgmtAction.getHasPermissionSHOWCOST()}">
+                                    <i class="fas fa-dollar-sign"></i></s:div>
+                                <s:div styleClass="wallsch_body_sch_right_div costcolor" rendered="#{ddsWallAndLineScheduleMgmtAction.viewCost &amp;&amp; sch.cost != null &amp;&amp; (sch.cost).length() &gt; 0  &amp;&amp; ddsWallAndLineScheduleMgmtAction.getHasPermissionSHOWCOST()}">
+                                    <h:outputText value="#{sch.cost}">
+                                    </h:outputText>
+                                    <br />
+                                </s:div>
+                            </div>
+                            <div style="clear:both"></div>
+                            <div>
+                                <s:div styleClass="wallsch_body_sch_left_div commentcolor" rendered="#{ddsWallAndLineScheduleMgmtAction.viewUserComment &amp;&amp; sch.userComment != '' &amp;&amp; sch.userComment != null &amp;&amp; ddsWallAndLineScheduleMgmtAction.getHasPermissionSHOWSCHEDULEUSERCOMMENT()}">
+                                    <i onclick="#{ddsWallAndLineScheduleMgmtAction.getCanAddVirtualScheduleFromMenu()} ? addaddUerCommentFromMenu(#{sch.masterId}) : '';"
+                                        style="cursor: #{ddsWallAndLineScheduleMgmtAction.getCanAddVirtualScheduleFromMenu() ? 'pointer' : 'default'}"
+                                        title="#{ddsWallAndLineScheduleMgmtAction.getElmbasecommentName()}" class="fas fa-comment-dots"></i>
+                                </s:div>
+                                <s:div styleClass="wallsch_body_sch_right_div commentcolor" rendered="#{ddsWallAndLineScheduleMgmtAction.viewUserComment &amp;&amp; sch.userComment != '' &amp;&amp; sch.userComment != null &amp;&amp; ddsWallAndLineScheduleMgmtAction.getHasPermissionSHOWSCHEDULEUSERCOMMENT()}">
+                                    <h:outputText value="#{ddsWallAndLineScheduleMgmtAction.getUserComment(sch.userComment)}"
+                                        title="#{ddsWallAndLineScheduleMgmtAction.getUserCommentTitle(sch.userComment)}"></h:outputText>
+                                </s:div>
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                    </a4j:repeat>
+                </div>
+            </td>
+        </a4j:repeat>
+
+
+        <a4j:jsFunction name="checkCanDragDropAndSaveMasterSchedule" action="#{ddsScheduleManualOpAction.checkCanDragDropAndSaveMasterSchedule()}"
+            render="ManuallyEditScheduleViolationAlertFrom" oncomplete="if(#{ddsScheduleManualOpAction.dragErrorCode == -2}){
+                                #{rich:component('ManuallyEditScheduleViolationAlertMP')}.show();
+                                return false;
+                            }else if (#{ddsScheduleManualOpAction.dragErrorCode == -1}){
+                                schAlert('#{ddsScheduleManualOpAction.copyScheduleMessages}');
+                            }else{
+                                refreshWallSchedule();
+                            }"
+            execute="@this">
+            <a4j:param name="associateId" assignTo="#{ddsScheduleManualOpAction.dragToAssociateId}" />
+            <a4j:param name="dayNum" assignTo="#{ddsScheduleManualOpAction.dragToDayIndex}" />
+            <a4j:param name="curMasterScheduleId" assignTo="#{ddsScheduleManualOpAction.curMasterScheduleId}" />
+            <a4j:param name="isDeleteOriginalDragedSchedule" value="true" assignTo="#{ddsScheduleManualOpAction.isDeleteOriginalDragedSchedule}" />
+        </a4j:jsFunction>
+
+        <a4j:jsFunction name="doSaveDragMasterScheduleOnViolationMP" action="#{ddsScheduleManualOpAction.doSaveDragMasterScheduleOnViolationMP()}"
+            oncomplete="if(#{ddsScheduleManualOpAction.canClose == true}){
+                                refreshWallSchedule();
+                            }else{
+                                return false;
+                            }"
+            execute="@this">
+        </a4j:jsFunction>
+
+        <a4j:jsFunction name="copyToClipboardJsFunc" render="wallSchedlueDisplay" oncomplete="setScrollTop();" action="#{ddsScheduleAddShiftToHrMgrAction.addMasterScheduleIdToClipboard()}">
+            <a4j:param name="curMasterScheduleId" assignTo="#{ddsScheduleAddShiftToHrMgrAction.pasteFromMasterScheduleId}" />
+            <a4j:param name="scrollTopOffset" assignTo="#{ddsWallAndLineScheduleMgmtAction.scrollTopOffset}" />
+        </a4j:jsFunction>
+
+        <a4j:jsFunction name="copyToManyPerAndDays" render="MasterCopyMP,MasterCopyForm" oncomplete="#{rich:component('MasterCopyMP')}.show();"
+            action="#{ddsScheduleManualOpAction.copyFromMenu()}">
+            <a4j:param name="curMasterScheduleId" assignTo="#{ddsScheduleManualOpAction.curMasterScheduleId}" />
+        </a4j:jsFunction>
+
+        <a4j:jsFunction name="pasteOnWallByIcon" action="#{ddsScheduleAddShiftToHrMgrAction.checkCanPasteAndSaveMasterScheduleFromClipboardToHr()}"
+            render="ManuallyEditScheduleViolationAlertFrom" oncomplete="if(#{ddsScheduleAddShiftToHrMgrAction.errorCode == -2}){
+                                #{rich:component('ManuallyEditScheduleViolationAlertMP')}.show();
+                                return false;
+                            }else if (#{ddsScheduleAddShiftToHrMgrAction.errorCode == -1}){
+                                schAlert('#{ddsScheduleAddShiftToHrMgrAction.errorText}');
+                            }else{
+                                refreshWallSchedule();
+                            }"
+            execute="@this">
+            <a4j:param name="associateId" assignTo="#{ddsScheduleAddShiftToHrMgrAction.pasteToHrId}" />
+            <a4j:param name="dayNum" assignTo="#{ddsScheduleAddShiftToHrMgrAction.pasteToDayIndex}" />
+        </a4j:jsFunction>
+
+        <a4j:jsFunction name="doSavePasteMasterScheduleOnViolationMP" action="#{ddsScheduleAddShiftToHrMgrAction.doSavePasteMasterScheduleOnViolationMP()}"
+            oncomplete="if(#{ddsScheduleAddShiftToHrMgrAction.canClose == true}){
+                                refreshWallSchedule();
+                            }else{
+                                return false;
+                            }"
+            execute="@this">
+        </a4j:jsFunction>
+
+
+        <a4j:jsFunction name="deleteTransitionOnWallByicon" action="#{ddsScheduleManualOpAction.checkLimitAndDeleteMasterScheduleByicon()}"
+            render="ManuallyEditScheduleViolationAlertFrom" oncomplete="if(#{!ddsScheduleManualOpAction.canClose &amp;&amp; ddsScheduleManualOpAction.showViolationCheckMP}){
+                               #{rich:component('ManuallyEditScheduleViolationAlertMP')}.show(); 
+                        }else{
+                            refreshWallSchedule();
+                        }"
+            execute="@this">
+            <a4j:param name="curMasterScheduleId" assignTo="#{ddsScheduleManualOpAction.curMasterScheduleId}" />
+        </a4j:jsFunction>
+        <a4j:jsFunction name="createEasyShiftFunc" action="#{ddsScheduleAddShiftToHrMgrAction.addEasyShiftToHr(false)}"
+            render="ManuallyEditScheduleViolationAlertFrom,messagePanel" oncomplete="if(#{!ddsScheduleAddShiftToHrMgrAction.canClose}){
+                                                if(#{ddsScheduleManualOpViolationMgrAction.violationList != null &amp;&amp; ddsScheduleManualOpViolationMgrAction.violationList.size() &gt; 0}){
+                                                    #{rich:component('ManuallyEditScheduleViolationAlertMP')}.show();
+                                                }
+                                                return false;
+                                            }else{
+                                                refreshWallSchedule(); 
+                                            }"
+            execute="@this">
+            <a4j:param name="assocateId" assignTo="#{ddsScheduleAddShiftToHrMgrAction.selectedHrId}" />
+            <a4j:param name="dayNum" assignTo="#{ddsScheduleAddShiftToHrMgrAction.selectedDayIndex}" />
+            <a4j:param name="startTime" assignTo="#{ddsScheduleAddShiftToHrMgrAction.inputStartTimeStrOnGUI}" />
+            <a4j:param name="endTime" assignTo="#{ddsScheduleAddShiftToHrMgrAction.inputEndTimeStrOnGUI}" />
+        </a4j:jsFunction>
+
+    </tr>
+</table>
+<script>
+
+    //------------DragDrop operation-----------start---------//
+    function allowDrop(ev) {
+        var showIcons = #{ ddsWallAndLineScheduleMgmtAction.canAddVirSchOnWallSch == true
+    };
+    if (!showIcons) {
+        return;
+    }
+    ev.preventDefault();
+    }
+
+    function drag(ev, masterSchId) {
+        ev.dataTransfer.setData("Text", masterSchId);
+        ev.dataTransfer.setData("id", ev.target.id);
+    }
+
+    function drop(ev, aimAssociateId, dayNum) {
+        ev.preventDefault();
+        var masterSchId = ev.dataTransfer.getData("Text");
+        if (!aimAssociateId) {
+            schAlert("#{i18n.translate('elm.eas.alertScript.selectTeammate','Please select a Teammate')}");
+            return false;
         }
-    </style>
-    <p:columnGroup type="header">
+        checkCanDragDropAndSaveMasterSchedule(aimAssociateId, dayNum, masterSchId);//DragDrop,old will be deleted  
 
-        <p:row>
-            <p:column styleClass="column0" width="5%">
-                <f:facet name="header"></f:facet>
-            </p:column>
-            <p:column width="20%" styleClass="column1" filterBy="#{row.orgName}" sortBy="#{row.orgName}">
+        var id = ev.dataTransfer.getData("id");
+        var item = document.getElementById(id).cloneNode();
+        ev.target.appendChild(item);
 
-                <f:facet name="header">#{messages['STATIC_LABEL.ORG_NAME']}</f:facet>
-            </p:column>
-            <p:column width="25%" styleClass="column0" filterBy="#{row.jobClassName}" sortBy="#{row.jobClassName}">
+    }
+    //------------DragDrop operation-----------End---------//
 
-                <f:facet name="header">#{i19n.translate('elm.base.ejc')}</f:facet>
-            </p:column>
-            <p:column width="12%" styleClass="column1" filterBy="#{formatters.dateOnlyWithEFormat.format(row.startDate)}"
-                sortBy="#{row.startDate}">
+    //------------Delete icon operation-------------
+    function deleteTransition(masterSchId) {
+        bootbox.confirm({
+            title: "#{i18n.translate('elm.scheduling.common.confirm','Confirm')} ",
+            message: "#{i18n.translate('elm.scheduling.msg.DoYouWantToDeleteThisSchedule','Do you want to delete this schedule?')}",
+            buttons: {
+                confirm: {
+                    label: '<i class="fa fa-check"></i> Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: '<i class="fa fa-times"></i> No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result) {
+                    deleteTransitionOnWallByicon(masterSchId);
+                } else {
+                    return;
+                }
+            }
+        });
+    }
 
-                <f:facet name="header">#{messages['STATIC_LABEL.START_DATE']}</f:facet>
-            </p:column>
-            <p:column width="12%" styleClass="column0" filterBy="#{formatters.dateOnlyWithEFormat.format(row.endDate)}"
-                sortBy="#{row.endDate}">
+    //-----------copyicon----------//
+    function copyToClipboard(masterId) {
+        scrollTopOffset = document.getElementById('wallsch_body').scrollTop;
+        scrollTopOffset = parseInt(scrollTopOffset);
+        //console.log("scrollTopOffset is %s",scrollTopOffset);
+        copyToClipboardJsFunc(masterId, scrollTopOffset);
+    }
 
-                <f:facet name="header">#{messages['STATIC_LABEL.END_DATE']}</f:facet>
-            </p:column>
 
-            <p:column styleClass="column1" width="14%">
-                <f:facet name="header">#{messages['STATIC_LABEL.TIME_RANGE']}</f:facet>
-            </p:column>
-            <p:column styleClass="column0" width="10%">
-                <f:facet name="header">#{messages['STATIC_LABEL.VALUE']}</f:facet>
-            </p:column>
+    //onmousemove css----------start---------//
+    function showOperationIcons(obj, canDrag, canCopy, canDelete) {
 
-            <p:column styleClass="column1" width="10%" rendered="#{debug}">
-            </p:column>
-        </p:row>
-    </p:columnGroup>
-    <p:column style="text-align:center">
-        <h:selectBooleanCheckbox value="#{row.checked}" />
-    </p:column>
-    <p:column style="text-align:left">
-        #{row.orgName}
-    </p:column>
-    <p:column style="text-align:left">
-        #{row.jobClassName}
-    </p:column>
-    <p:column style="text-align:center;">
-        #{formatters.dateOnlyWithEFormat.format(row.startDate)}
-    </p:column>
-    <p:column style="text-align:center;">
-        #{formatters.dateOnlyWithEFormat.format(row.endDate)}
-    </p:column>
+        /* console.log("canDrag is %s",canDrag);
+        console.log("canCopy is %s",canCopy);
+        console.log("canDelete is %s",canDelete); */
+        if (canDrag == true) {
+            $(obj).find("i.fa.fa-arrows-alt").css("display", "block");
+        }
+        if (canCopy == true) {
+            $(obj).find("i.fa.fa-copy").css("display", "block");
+            $(obj).find("i.fas.fa-clone").css("display", "block");
+        }
+        if (canDelete == true) {
+            $(obj).find("i.fa.fa-trash").css("display", "block");
+        }
 
-    <p:column style="text-align:center; padding: 0 0 0 0;">
-        <ui:repeat value="#{row.demandValuesList}" var="os" varStatus="rkv">
-            <s:decorate rendered="#{!(rkv.last)}">
-                <div style="width: 100%; height: 20px; line-height: 20px; border-style: solid; border-color: #C0C0C0; border-width: 0px 0px 1px 0px; color: black; font-weight: normal;">
-                    #{os.startOffsetName}-#{os.endOffsetName}</div>
-            </s:decorate>
-            <s:decorate rendered="#{rkv.last}">
-                <div style="width: 100%; height: 20px; line-height: 20px; border-style: solid; border-color: #C0C0C0; border-width: 0px 0px 0px 0px; color: black; font-weight: normal;">
-                    #{os.startOffsetName}-#{os.endOffsetName}</div>
-            </s:decorate>
-        </ui:repeat>
-    </p:column>
-    <p:column style="text-align:center;padding: 0 0 0 0;">
-        <ui:repeat value="#{row.demandValuesList}" var="os" varStatus="rkv">
-            <s:decorate rendered="#{!rkv.last}">
-                <div style="width: 100%; height: 20px; line-height: 20px; border-style: solid; border-color: #C0C0C0; border-width: 0px 0px 1px 0px; color: black; font-weight: normal;">#{os.paramValue}</div>
-            </s:decorate>
-            <s:decorate rendered="#{rkv.last}">
-                <div style="width: 100%; height: 20px; line-height: 20px; border-style: solid; border-color: #C0C0C0; border-width: 0px 0px 0px 0px; color: black; font-weight: normal;">#{os.paramValue}</div>
-            </s:decorate>
-        </ui:repeat>
-    </p:column>
+        var showIcons = #{ ddsWallAndLineScheduleMgmtAction.canAddVirSchOnWallSch == true
+    };
+    if (showIcons) {
+        $(obj).find(".transitionDiv").css({
+            "border-style": "dotted",
+            "border-width": "0px",
+            "border-color": "peru",
+        });
 
-    <p:column style="text-align:center" rendered="#{debug}">
-        <a4j:commandLink style="text-decoration: unset;" title="#{messages['STATIC_LABEL.VIEW']}" render="WeekEditMP"
-            execute="@this" oncomplete="#{rich:component('WeekEditMP')}.show();" action="#{demandValuesEditAction.editDemandValuesDayMode(row,'MIN','3')}">
-            <i class="fas fa-arrow-right" style="font-size: 18px;"></i>
-        </a4j:commandLink>
-        <h:graphicImage value="/2018/img/blank.png" width="10px" />
-        <a4j:commandLink title="#{messages['STATIC_LABEL.EDIT']}" style="text-decoration: unset;" render="WeekEditMP,DVForm"
-            execute="@this" oncomplete="#{rich:component('WeekEditMP')}.show();" action="#{demandValuesEditAction.editDemandValuesDayMode(row,'MIN','2')}">
-            <i class="far fa-edit" style="color: #028f98;font-size: 18px;"></i>
-        </a4j:commandLink>
-        <h:graphicImage value="/2018/img/blank.png" width="10px" />
-        <a4j:commandLink title="#{messages['STATIC_LABEL.DELETE']}" style="text-decoration: unset;" execute="@this"
-            onclick="if(!confirmDeleteDemandValues()){return false ;}" render="minListForm" action="#{demandValuesEditAction.deleteDemandValuesDayMode(row,'MIN')}">
-            <i class="far fa-trash-alt" style="color: #df2121;font-size: 18px;"></i>
-        </a4j:commandLink>
-    </p:column>
-</p:dataTable>
+    }
+    	
+    }
+
+    function showPasteIcon(obj, canPaste) {
+        if (canPaste == true) {
+            $(obj).find("i.fas.fa-paste").css("display", "block");
+        }
+
+    }
+    function hidePasteIcon(obj) {
+        $(obj).find("i.fas.fa-paste").css("display", "none");
+    }
+    function hideOperationIcons(obj) {
+        $(obj).find("i.fa.fa-copy").css("display", "none");
+        $(obj).find("i.fa.fa-trash").css("display", "none");
+        $(obj).find("i.fa.fa-arrows-alt").css("display", "none");
+        $(obj).find("i.fas.fa-clone").css("display", "none");
+
+        $(obj).find(".transitionDiv").css({
+            "border-width": "0px",
+        });
+    }
+    //onmousemove css----------End---------//
+
+</script>

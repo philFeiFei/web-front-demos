@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <style>
+        .demo-table-expand {
+            font-size: 0;
+        }
+
+        .demo-table-expand label {
+            width: 90px;
+            color: #99a9bf;
+        }
+
+        .demo-table-expand .el-form-item {
+            margin-right: 0;
+            margin-bottom: 0;
+            width: 50%;
+        }
+
+        .el-table th div {
+            line-height: 40px;
+            box-sizing: border-box;
+            white-space: nowrap;
+            /* display: inline; */
+            width: 86%;
+            float: right;
+        }
+
+        input.el-input__inner {
+            width: 40%;
+            float: right;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Demo sites</h1>
+    <div id="app" ref="div">
+        <el-table border
+            :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+            style="width: 100%">
+            <el-table-column label="Name" prop="name">
+                <template slot="header" slot-scope="scope">
+                    Name
+                    <el-input v-model="search" size="mini" placeholder="Please input demo name" />
+                </template>
+            </el-table-column>
+            <el-table-column label="Site" prop="address">
+            </el-table-column>
+            <el-table-column label="Server Info" prop="server">
+            </el-table-column>
+            <el-table-column align="right">
+                <template slot-scope="scope">
+                    <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">Open URL
+                    </el-button>
+                    <el-button size="mini" type="success" @click="handleDelete(scope.$index, scope.row)">Copy URL
+                    </el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+
+
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                tableData: [{
+                    name: 'BigY',
+                    address: 'https://by-demo.logile.com/myportal/',
+                    server: '10.0.3.231-wildfly-10.1.0.Final_bigy ',
+                }, {
+                    name: 'Fiesta',
+                    address: 'https://fiesta-dev.logile.com/portal/eas/login.seam',
+                    server: '10.0.3.67-wildfly-10.1.0.Final_fiesta ',
+                }, {
+                    name: 'coborns',
+                    address: 'https://coborns-dev.logile.com/portal/',
+                    server: '10.0.3.231-wildfly-10.1.0.Final_bigy ',
+                }, {
+                    name: 'Soriana-Demo',
+                    address: 'https://soriana-demo.logile.com/portal/eas/login.seam',
+                    server: '10.0.3.231-wildfly-10.1.0.Final_bigy ',
+                }],
+                search: ''
+            }
+        })
+    </script>
+</body>
+
+</html>

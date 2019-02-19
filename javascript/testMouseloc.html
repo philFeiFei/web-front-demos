@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <h1>下面是测试DIV</h1>
+
+    <div class="wallsch_body_sch_right_div_input" style="height:1500px;width:400px;border:1px solid red;">
+        哈哈
+        <div style="height:300px;width:300px;border:1px solid blue;">
+            内部div</div>
+        <div style="height:300px;width:300px;border:1px solid blue;">
+            内部div</div>
+        <input type="text" name="aaa" id="aaa" onblur="testMouseLoc()">
+    </div>
+
+    <script>
+        $(document).mousemove(function (e) {
+            x = e.pageX;
+            y = e.pageY;
+        })
+        function testMouseLoc() {
+            console.log("mousX is %s,mouseY is %s", x, y);
+            var div = $(".wallsch_body_sch_right_div_input");
+            var y1 = div.offset().top;
+            var y2 = y1 + div.height();
+            var x1 = div.offset().left;
+            var x2 = x1 + div.width();
+            console.log("x1 is %s,x2 is %s,y1 is %s,y2 is %s", x1, x2, y1, y2);
+
+
+            if (x < x1 || x > x2 || y < y1 || y > y2) {
+                console.log("鼠标不在该DIV中");
+            } else {
+                console.log("鼠标在该DIV中");
+            }
+
+        }
+    </script>
+</body>
+
+</html>
