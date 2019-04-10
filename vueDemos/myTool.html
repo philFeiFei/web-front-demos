@@ -5,13 +5,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Portal</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <!-- 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <!-- 引入组件库 -->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
     <style>
+        /**/
+
+        .panel-group {
+            margin-top: 18px;
+        }
+
+        .panel-group .card-panel-col {
+            margin-bottom: 32px;
+        }
+
+        .panel-group .card-panel {
+            height: 66px;
+            cursor: pointer;
+            font-size: 12px;
+            position: relative;
+            overflow: hidden;
+            color: #666;
+            background: thistle;
+            box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .panel-group .card-panel:hover .card-panel-icon-wrapper {
+            color: #fff;
+        }
+
+        .panel-group .card-panel:hover .icon-people {
+            background: #40c9c6;
+        }
+
+        .panel-group .card-panel:hover .icon-message {
+            background: #36a3f7;
+        }
+
+        .panel-group .card-panel:hover .icon-money {
+            background: #f4516c;
+        }
+
+        .panel-group .card-panel:hover .icon-login {
+            background: yellowgreen;
+        }
+
+        .panel-group .card-panel:hover .icon-shopping {
+            background: #34bfa3;
+        }
+
+        .panel-group .card-panel .icon-people {
+            color: #40c9c6;
+        }
+
+        .panel-group .card-panel .icon-message {
+            color: #36a3f7;
+        }
+
+        .panel-group .card-panel .icon-money {
+            color: #f4516c;
+        }
+
+        .panel-group .card-panel .icon-shopping {
+            color: #34bfa3;
+        }
+
+        .panel-group .card-panel .card-panel-icon-wrapper {
+            float: left;
+            padding: 13px;
+            transition: all 0.38s ease-out;
+            border-radius: 6px;
+        }
+
+        .panel-group .card-panel .card-panel-icon {
+            float: left;
+            font-size: 48px;
+        }
+
+        .panel-group .card-panel .card-panel-description {
+            float: right;
+            font-weight: bold;
+            margin: 26px;
+            margin-left: 0px;
+        }
+
+        .panel-group .card-panel .card-panel-description .card-panel-text {
+            line-height: 18px;
+            color: rgba(0, 0, 0, 0.45);
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .panel-group .card-panel .card-panel-description .card-panel-num {
+            font-size: 20px;
+        }
+
+        i.fas.fa-heading {
+            font-size: 40px;
+        }
+
+        i.fas.fa-headset {
+            font-size: 40px;
+        }
+
+        i.fas.fa-pencil-alt {
+            font-size: 40px;
+        }
+        i.fas.fa-sign-in-alt{
+        	font-size: 40px;
+        }
+
+        /*panel group end*/
+
         .demo-table-expand {
             font-size: 0;
         }
@@ -28,45 +140,136 @@
         }
 
         .el-table th div {
-            line-height: 40px;
             box-sizing: border-box;
             white-space: nowrap;
-            /* display: inline; */
-            width: 86%;
+            width: 70%;
             float: right;
+            padding: 0px;
         }
 
         input.el-input__inner {
-            width: 40%;
-            float: right;
+            float: left;
+        }
+
+        .el-table--small td,
+        .el-table--small th {
+            padding: 0px 0;
+        }
+
+        .el-button--mini {
+            padding: 2px 1px;
+        }
+
+        .el-input--mini .el-input__inner {
+            height: 23px;
+        }
+
+        .el-table th.is-leaf {
+            border-bottom: 1px solid #ebeef5;
+            background-color: floralwhite;
+            text-align: center;
+            color: sienna;
         }
     </style>
 </head>
 
 <body>
-    <h1>Demo sites</h1>
+    <h1>My Portal</h1>
     <div id="app" ref="div">
-        <el-table border
+        <el-row :gutter="40" class="panel-group">
+            <el-col :xs="12" :sm="12" :lg="4" class="card-panel-col">
+                <div class="card-panel" @click="openPage('hudson')">
+                    <div class="card-panel-icon-wrapper icon-people">
+                        <i class="fas fa-heading"></i>
+                    </div>
+                    <div class="card-panel-description">
+                        <div class="card-panel-text">Hudson</div>
+                    </div>
+                </div>
+            </el-col>
+            <el-col :xs="12" :sm="12" :lg="4" class="card-panel-col">
+                <div class="card-panel" style="background-color:cadetblue" @click="openPage('ticket')">
+                    <div class="card-panel-icon-wrapper icon-message">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="card-panel-description">
+                        <div class="card-panel-text">Ticket</div>
+                    </div>
+                </div>
+            </el-col>
+            <el-col :xs="12" :sm="12" :lg="4" class="card-panel-col">
+                <div class="card-panel" @click="openPage('uiux')">
+                    <div class="card-panel-icon-wrapper icon-money">
+                        <i class="fas fa-pencil-alt"></i>
+                    </div>
+                    <div class="card-panel-description">
+                        <div class="card-panel-text">UIUX</div>
+                    </div>
+                </div>
+            </el-col>
+
+             <el-col :xs="12" :sm="12" :lg="4" class="card-panel-col">
+                <div class="card-panel" style="background-color:cadetblue" @click="openPage('local')">
+                    <div class="card-panel-icon-wrapper icon-message">
+                        <i class="fas fa-sign-in-alt"></i>
+                    </div>
+                    <div class="card-panel-description">
+                        <div class="card-panel-text">Local Login</div>
+                    </div>
+                </div>
+            </el-col>
+
+             <el-col :xs="12" :sm="12" :lg="4" class="card-panel-col">
+                <div class="card-panel"  @click="openPage('localUiux')">
+                    <div class="card-panel-icon-wrapper icon-people">
+                        <i class="fas fa-sign-in-alt"></i>
+                    </div>
+                    <div class="card-panel-description">
+                        <div class="card-panel-text">Local New</div>
+                    </div>
+                </div>
+            </el-col>
+        </el-row>
+
+
+
+        <el-table border size="small"
             :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
             style="width: 100%">
-            <el-table-column label="Name" prop="name">
+            <el-table-column prop="name" width="230px" align="center" fixed>
                 <template slot="header" slot-scope="scope">
                     Name
-                    <el-input v-model="search" size="mini" placeholder="Please input demo name" />
+                    <el-input v-model="search" size="mini" placeholder="Key words" />
                 </template>
             </el-table-column>
-            <el-table-column label="Site" prop="address">
+            <el-table-column label="env" prop="type" width="55px" align="center" fixed>
             </el-table-column>
-            <el-table-column label="Server Info" prop="server">
-            </el-table-column>
-            <el-table-column align="right">
+            <el-table-column label="URL" width="430px">
                 <template slot-scope="scope">
-                    <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">Open URL
-                    </el-button>
-                    <el-button size="mini" type="success" @click="handleDelete(scope.$index, scope.row)">Copy URL
+                    <span>{{ scope.row.address }}</span>
+                    <el-button size="mini" type="success" @click="openUrl(scope.row)">Open URL
                     </el-button>
                 </template>
             </el-table-column>
+            <el-table-column label="DB" prop="DB" width="285px">
+            </el-table-column>
+            <el-table-column label="server" prop="server" width="240px">
+            </el-table-column>
+            <el-table-column label="sow1URL" width="270px">
+                <template slot-scope="scope">
+                    <span>{{ scope.row.sow1_URL }}</span>
+                    <el-button v-show="showSow1URLBtn(scope.row.sow1_URL)" size="mini" type="success"
+                        @click="openSow1Url(scope.row)">Open URL
+                    </el-button>
+                </template>
+            </el-table-column>
+            <el-table-column label="sow1_DB" prop="sow1_DB" min-width="290px">
+            </el-table-column>
+            <el-table-column v-if="showSow1Server" label="sow1_Server" prop="sow1_server" width="210px">
+            </el-table-column>
+            <el-table-column v-if="showOtherInfo" label="other_Info" prop="otherInfo" min-width="200px">
+            </el-table-column>
+
         </el-table>
     </div>
 
@@ -74,26 +277,105 @@
     <script>
         var app = new Vue({
             el: "#app",
+            
             data: {
+            	showSow1Server:false,
+            	showOtherInfo:false,
                 tableData: [{
-                    name: 'BigY',
+                    name: 'by-demo',
                     address: 'https://by-demo.logile.com/myportal/',
-                    server: '10.0.3.231-wildfly-10.1.0.Final_bigy ',
-                }, {
-                    name: 'Fiesta',
+                    server: '10.0.3.231-wildfly-10.1.0.Final_bigy',
+                    type: 'dev',
+                    DB: '10.0.3.76 elm_BY_EC5_LS_TA_DEMO',
+                    sow1_URL: '',
+                    sow1_DB: '10.0.3.75/elm_by08182016,elm_user l0g1le!nc',
+                    sow1_server: '',
+                    otherInfo: '',
+                },
+                {
+                    name: 'fiesta-dev',
                     address: 'https://fiesta-dev.logile.com/portal/eas/login.seam',
-                    server: '10.0.3.67-wildfly-10.1.0.Final_fiesta ',
-                }, {
-                    name: 'coborns',
+                    server: '10.0.3.67-wildfly-10.1.0.Final_fiesta',
+                    type: 'dev',
+                    DB: '10.0.3.76/ELM_FIESTA_LS_TA_EC5_DEV',
+                    sow1_URL: 'http://10.0.3.69:8000/elm/',
+                    sow1_DB: ' 10.0.3.75/ELM_FIESTA，elm_user,l0g1le!nc',
+                    sow1_server: '',
+                    otherInfo: '',
+                },
+                {
+                    name: 'coborns-dev',
                     address: 'https://coborns-dev.logile.com/portal/',
-                    server: '10.0.3.231-wildfly-10.1.0.Final_bigy ',
-                }, {
-                    name: 'Soriana-Demo',
+                    server: '10.0.3.231-wildfly-10.1.0.Final_bigy',
+                    type: 'dev',
+                    DB: '10.0.3.76......, elm_user/ l0g1le',
+                    sow1_URL: '10.0.3.69:8080/elm/',
+                    sow1_DB: '10.0.3.75,elm_user l0g1le!nc',
+                    sow1_server: '',
+                    otherInfo: '',
+                },
+                {
+                    name: 'soriana-demo',
                     address: 'https://soriana-demo.logile.com/portal/eas/login.seam',
-                    server: '10.0.3.231-wildfly-10.1.0.Final_bigy ',
-                }],
+                    server: '10.0.3.231-wildfly-10.1.0.Final_bigy',
+                    type: 'dev',
+                    DB: '10.0.3.76......, elm_user/ l0g1le',
+                    sow1_URL: '',
+                    sow1_DB: '',
+                    sow1_server: '',
+                    otherInfo: '',
+                },
+
+                //------------Prod--------------
+                {
+                    name: 'S & F',
+                    address: 'https://sf.logile.com/portal/eas/login.seam',
+                    server: '10.0.2.81-wildfly-10.1.0.Final',
+                    type: 'prod',
+                    DB: '10.0.2.80/SF_ELM_LS,  elm_user/l0g1le!nc',
+                    sow1_URL: '',
+                    sow1_DB: '',
+                    sow1_server: '',
+                    otherInfo: '',
+                },
+
+
+
+
+
+                ],
                 search: ''
-            }
+            },
+            methods: {
+                openUrl(row) {
+                    window.open(row.address);
+                },
+                openSow1Url(row) {
+                    window.open(row.sow1_URL);
+                },
+                openPage(source) {
+                    if ('hudson' == source) {
+                        window.open('http://hudson.logile.com/');
+                    } else if ('ticket' == source) {
+                        window.open('https://helpdesk.logile.com/a/tickets/filters/134819');
+                    }else if ('uiux' == source) {
+                        window.open('https://app.zeplin.io/project/5ace0ef51bed49c9b89ef2e5/dashboard');
+                    }else if ('local' == source) {
+                        window.open('http://localhost:8080/ews/main_pc.seam');
+                    }else if ('localUiux' == source) {
+                        window.open('http://localhost:8080/ews/2018/main_pc.seam');
+                    }
+                },
+                showSow1URLBtn(sow1URL) {
+                    if (sow1URL) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            },
+
+
         })
     </script>
 </body>

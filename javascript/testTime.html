@@ -13,97 +13,53 @@
 </head>
 
 <body>
+    <div class="selectedOrgClass" style="overflow: auto; width: 200px; height: 100px">
+        <input type="text" name="aaaa" id="">
+        <input type="text" name="aaaa" id="">
+        <input type="text" name="aaaa" id="">
+        <input type="text" name="aaaa" id="">
+        <input type="text" name="aaaa" id="">
+        <input type="text" name="aaaa" id="">
+        <input type="text" name="aaaa" id="">
+        <input type="text" name="aaaa" id="">
+        <input type="text" name="aaaa" id="">
+        <input type="text" name="aaaa" id="">
+        <input type="text" name="aaaa" id="">
+        <input type="text" name="aaaa" id="">
+        <input type="text" name="aaaa" id="">
+        <input type="text" name="aaaa" id="">
 
-    InputMask JS：<input id="dateIM" type="text" onblur="checkTime(3)" />
+    </div>
 
-    <script>
-        $(function () {
+    <style>
+        /* overflow: auto;
+        当内容高度大于设置高度时，会产生y轴scroll bar  */
 
-            //jquery inputMask demo
-            $("#dateIM").inputmask("datetime", {
-                mask: "h:sA-h:sA",
-                placeholder: "00:00A-00:00P",
-            });
-        });
+        /* 本案例技巧的地方：将滚动条轨道和滚动条滑动块的边框设置为与大背景色相同*/
 
-        function generateOffset(date, dayIndex) {
-            var dateChar = date.substr(5)
-            var dateHourAndMin = date.substr(0, 5)
-            var dateArr = dateHourAndMin.split(':')
-            var hour = dateArr[0];
-            var min = dateArr[1]
-            if (hour > 12) {// main base A or P, not hour
-                hour = hour - 12
-            }
-            var extraHour = 0
-            if (dateChar == 'P') {//if afternoon  aad 12hour again
-                extraHour = 12;
-            }
-            console.log('dayindex-hour-min', dayIndex, hour, min);
-            var offset = (dayIndex * 96) + (hour * 4) + (extraHour * 4)
-                + parseInt(min / 15);
-            return offset;
+        /*----这个是指整个滚动条----*/
+        .selectedOrgClass::-webkit-scrollbar {
+            width: 10px;
         }
 
-        function generateNewDate(date) {
-            var dateChar = date.substr(5)
-            var dateHourAndMin = date.substr(0, 5)
-            var dateArr = dateHourAndMin.split(':')
-            console.log(dateChar, dateArr[0])
-            if (dateArr[0] > 12) {
-                dateArr[0] = dateArr[0] - 12
-            }
-            var newDate = dateArr[0] + ":" + dateArr[1] + dateChar;
-            console.log("newDate", newDate);
-            return newDate;
-        }
-        function checkDate(date) {
-            var dateChar = date.substr(5)
-            if (dateChar != 'A' && dateChar != 'P') {
-                alert('you should enter "A" or "P" at the end of shift');
-                return false;
-            }
-            return true;
+        /*----这个是指滚动条上的滑动块----*/
+        .selectedOrgClass::-webkit-scrollbar-thumb {
+            background: #e52973;
+            border-right: 2px solid white;
+            border-left: 2px solid white;
         }
 
-        function checkTime(dayIndex) {
-            var dateStr = $("#dateIM").val();
-            if (!dateStr) {
-                alert("Please enter shift time");
-                return false;
-            }
-            var arr = dateStr.split('-');
-            if (!arr && arr.length < 2) {
-                alert('Please enter right formate shift time');
-                return false;
-            }
-            var date1 = arr[0];
-            var date2 = arr[1];
-            console.log(date1, date2)
-
-            if (!checkDate(date1)) {
-                return false;
-            }
-            var newDate1 = generateNewDate(date1);
-            if (!checkDate(date2)) {
-                return false;
-            }
-            var newDate2 = generateNewDate(date2);
-
-
-            var newDate = newDate1 + '-' + newDate2;
-            console.log('newDate', newDate);
-            $("#dateIM").val(newDate);
-
-            var startOffset = generateOffset(date1, dayIndex)
-            var endOffset = generateOffset(date2, dayIndex)
-            if (startOffset > endOffset) {//means the endoffset is in next day
-                endOffset += 96;
-            }
-            console.log('startOffset', startOffset);
-            console.log('endOffset', endOffset);
+        /*----这个是滚动条轨道。整个背景是灰色，然后边框设置为4，然后看着这个轨道就像变窄了----*/
+        .selectedOrgClass::-webkit-scrollbar-track {
+            background-color: #cccccc;
+            border: 4px solid transparent;
+            background-clip: content-box;
         }
-    </script>
+
+        .selectedOrgClass {
+            border: 1px solid blue;
+        }
+    </style>
 </body>
 
 </html>

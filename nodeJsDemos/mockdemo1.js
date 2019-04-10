@@ -52,7 +52,7 @@ var data6 = mock.mock({
     email: Random.natural(3, 333),
     name: '@last @first',
     'ttt': {
-        'name|2': { ddddd: 'ccf', bb: 'dfedf', cc: 'dccc' }
+        'name|1': ['ccf', 'dfedf', 'dccc']
     }
 })
 
@@ -62,4 +62,4 @@ var template = {
 var data7 = mock.toJSONSchema(template)
 //第三个参数可选，代表前面的空格个数
 //console.log(data);
-console.log(JSON.stringify(data7, null, 2));
+console.log(JSON.stringify(data6, null, 2));
