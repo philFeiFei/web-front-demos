@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="resource/echarts.js"></script>
+</head>
+
+<body>
+    <h2>logile variance hours</h2>
+    <div id="varianceChart" style="width:1400px;height:200px;border:1px solid #dcdcdc;"></div>
+    <script>
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('varianceChart'));
+
+        //xAxisData设置96个数组元素即可，随意。
+        var xAxisData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,];
+        var ejc1data = [2, 3, -2, -1, -4, 3, 2, -1, 3, -4, 4, 3, 1, 2, -2, 3, 2, 3, -2, -1, -4, 3, 2, -1, 3, -4, 4, 3, 1, 2, -2, 3, 2, 3, -2, -1, -4, 3, 2, -1, 3, -4, 4, 3, 1, 2, -2, 3, 2, 3, -2, -1, -4, 3, 2, -1, 3, -4, 4, 3, 1, 2, -2, 3, 2, 3, -2, -1, -4, 3, 2, -1, 3, -4, 4, 3, 1, 2, -2, 3, 2, 3, -2, -1, -4, 3, 2, -1, 3, -4, 4, 3, 1, 2, -2, 3];
+        var ejc2data = [-2, 3, 2, -1, -4, 3, 2, -1, 3, -4, -4, 3, 1, -2, -2, -2, -2, 3, 2, -1, -4, 3, 2, -1, 3, -4, -4, 3, 1, -2, -2, -2, -2, 3, 2, -1, -4, 3, 2, -1, 3, -4, -4, 3, 1, -2, -2, -2, -2, 3, 2, -1, -4, 3, 2, -1, 3, -4, -4, 3, 1, -2, -2, -2, -2, 3, 2, -1, -4, 3, 2, -1, 3, -4, -4, 3, 1, -2, -2, -2, -2, 3, 2, -1, -4, 3, 2, -1, 3, -4, -4, 3, 1, -2, -2, -2];
+        var ejc3data = [2, 3, -2, 1, 4, 3, -2, -1, 3, -4, 4, 3, 1, 2, 2, 1, 2, 3, -2, 1, 4, 3, -2, -1, 3, -4, 4, 3, 1, 2, 2, 1, 2, 3, -2, 1, 4, 3, -2, -1, 3, -4, 4, 3, 1, 2, 2, 1, 2, 3, -2, 1, 4, 3, -2, -1, 3, -4, 4, 3, 1, 2, 2, 1, 2, 3, -2, 1, 4, 3, -2, -1, 3, -4, 4, 3, 1, 2, 2, 1, 2, 3, -2, 1, 4, 3, -2, -1, 3, -4, 4, 3, 1, 2, 2, 1];
+        var ejc4data = [2, -3, 2, -1, -4, 3, 2, 1, 3, 4, 4, 3, -1, 2, -2, -2, 2, -3, 2, -1, -4, 3, 2, 1, 3, 4, 4, 3, -1, 2, -2, -2, 2, -3, 2, -1, -4, 3, 2, 1, 3, 4, 4, 3, -1, 2, -2, -2, 2, -3, 2, -1, -4, 3, 2, 1, 3, 4, 4, 3, -1, 2, -2, -2, 2, -3, 2, -1, -4, 3, 2, 1, 3, 4, 4, 3, -1, 2, -2, -2, 2, -3, 2, -1, -4, 3, 2, 1, 3, 4, 4, 3, -1, 2, -2, -2];
+        var ejcVarianceList = [ejc1data, ejc2data, ejc3data, ejc4data]; //后台组装
+        var ejcNameList = ['ejc1name', 'ejc2name', 'ejc3name', 'ejc4name']; //后台组装
+        var ejcColorList = ['red', 'blue', 'gray', 'black'];
+        var barGap = '1%';
+        var barCategoryGap = '4%'; //bar 之间间距
+        var length = ejcNameList.length;
+        var seriesForEjc = [];
+        for (var i = 0; i < length; i++) {
+            var seriesObj = {
+                name: ejcNameList[i],
+                data: ejcVarianceList[i],
+                type: 'bar',
+                stack: 'one',
+                itemStyle: itemStyle,
+                barCategoryGap: barCategoryGap,//间距 bar之间
+            };
+            seriesForEjc.push(seriesObj);
+        }
+
+        var itemStyle = {
+            normal: {
+            },
+        };
+
+        option = {
+            //backgroundColor: '#eee',
+            toolbox: {
+                show: true
+            },
+            color: ejcColorList,
+            legend: {
+                data: ejcNameList,//show legned 需要与series中gname一致
+                align: 'left',
+                left: 10
+            },
+            tooltip: {
+                show: true,
+                trigger: 'axis',  //鼠标挪上去显示阴影
+                axisPointer: {
+                    type: 'shadow'  //鼠标挪上去显示阴影
+                }
+            },
+            xAxis: {
+                data: xAxisData,
+                splitLine: {
+                    show: true,        // 默认显示，属性show控制显示与否
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        color: '#48b',
+                        width: 2,
+                        type: 'solid'
+                    }
+                }, //与y轴平行的刻度
+                //splitArea: { show: true } //每一个竖着的区域颜色变换背景
+                axisLabel: {           // 坐标轴文本标签，详见axis.axisLabel
+                    show: true,
+                    interval: 3,//间隔几个刻度，如果出现与y轴平行的刻度时。
+                },
+            },
+            yAxis: {
+                inverse: false,
+                /*   axisLine: { onZero: true, show: true },
+                  splitLine: { show: true },//与x中平行的网格线
+                  splitArea: { show: false } */
+            },
+            grid: {
+                left: 20,
+                right: 1,
+                bottom: 1,
+            },
+            series: seriesForEjc,
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+        window.addEventListener('resize', function () { myChart.resize(); })
+    </script>
+</body>
+
+</html>
