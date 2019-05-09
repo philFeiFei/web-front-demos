@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <div id="container" style="height: 400px; width:1400px;border:1px solid red;">
+    </div>
+    <script src=" resource/echarts.js"> </script>
+    <script type="text/javascript">
+
+
+        //dataSource---------start-------
+        var colorList = ['#003366', '#006699', '#4cabce', 'yellow', '#e5323e'];
+        var labelList = ['A', 'B', 'C', 'D', 'F']; //对应每一个x坐标的数据，可能是并排可能是堆叠等形式。--也是对应的legend
+        var labelOption = {
+            /*  normal: {
+                 show: true,
+                 position: 'top',//label显示在图的位置
+                 distance: 14,
+                 align: 'middle',//富文本label对齐
+                 verticalAlign: 'top',//富文本label显示靠下，如果是top
+                 rotate: 0,
+                 formatter: '{styleName|{a}:{c}}', //富文本标签样式，第一个是样式名称，第二个是label的内容，abc，x轴坐标，分类名称，数据等。
+ 
+                 rich: {
+                     styleName: {
+                         fontFamily: 'Microsoft YaHei',
+                         fontSize: 12,
+                         color: '#3d3d3d',
+                         fontWeight: 100,
+                     },
+                 }
+             } */
+        };
+        var xAxisList = ['3/24/2019', '3/17/2019', '3/24/2019', '3/24/2019', '3/24/2019', '3/24/2019', '3/24/2019'];
+
+        var gradAStoreCountList = [2, 2, 3, 4, 9, 3, 4];//这里面的数据是每一个xAxis对应的值，数量一致
+        var gradBStoreCountList = [3, 8, 1, 2, 8, 1, 4];
+        var gradCStoreCountList = [2, 4, 3, 4, 2, 8, 4];
+        var gradDStoreCountList = [1, 2, 1, 4, 6, 3, 2];
+        var gradFStoreCountList = [4, 5, 3, 7, 5, 3, 4];
+        var allGradList = [gradAStoreCountList, gradBStoreCountList, gradCStoreCountList, gradDStoreCountList, gradFStoreCountList]
+
+        var seriesObjList = [];
+        var length = labelList.length;
+        for (var i = 0; i < length; i++) {
+            var obj = {
+                name: labelList[i],
+                type: 'bar',
+                barGap: 0,
+                label: labelOption,
+                data: allGradList[i]
+            }
+            seriesObjList.push(obj);
+        }
+
+        //dataSource---------end-------
+        var dom = document.getElementById("container");
+        var myChart = echarts.init(dom);
+
+
+
+        let option = {
+            color: colorList,
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            legend: {
+                data: labelList
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    axisTick: { show: false },
+                    data: xAxisList
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: seriesObjList
+        };
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+    </script>
+</body>
+
+</html>
