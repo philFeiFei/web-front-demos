@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
@@ -22,6 +22,7 @@
         <label for="mike">Mike</label>
         <br>
         <span>Checked names: {{ checkedNames }}</span>
+
     </div>
 
 
@@ -44,15 +45,29 @@
 
         <input type="radio" v-model="pick" v-bind:value="a" id="jack1"><label for="jack1">Jack1</label>
         <input type="radio" v-model="pick" v-bind:value="b" id="jack2"><label for="jack2">Jack2</label>
-        <p>选中的是：{{pick}}</p>
+        <p>model pick选中的是：{{pick}}</p>
 
 
         <label for="jack3">Jack3</label>
         <input type="radio" id="jack3" name="sex" v-model="sexT" value="jack3">
         <label for="jack4">Jack4</label>
-        <input type="radio" id="jack4" name="sex" v-model="sexT" value="jack4">
+        <input type="radio" id="jack4" name="sex1" v-model="sexT" value="jack4">
 
-        <input type="text" name="jack" id="bss" :value="sexT"><span>{{sexT}}</span>
+        <input type="text" name="jack" id="bss" v-model="sexT"><span>{{sexT}}</span>
+
+
+
+        <br />
+
+        <input type="checkbox" id="jack4" name="sex1" value="abcdef" v-model="chk1">
+        <p>您选择的是{{chk1}}</p>
+
+
+        <br />
+        <input type="text" v-model="inputM">
+        <p>文本框内容是：{{inputM}}</p>
+
+
     </div>
 
 
@@ -63,11 +78,13 @@
         var app = new Vue({
             el: "#app",
             data: {
-                pick: [],
+                pick: true,
                 pick1: [],
                 a: "hehehhehe",
                 b: "哈哈哈哈",
                 sexT: '',
+                chk1: true,
+                inputM: "wenben"
             }
         });
 

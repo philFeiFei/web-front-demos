@@ -6,8 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
     <style>
@@ -29,7 +29,7 @@
 <body>
     <h3>app Hello demo</h3>
     <div id="app" ref="div">
-        {{message}}
+        {{message1}}
     </div>
 
     <h3>app-2 v-bind:title demo
@@ -50,8 +50,8 @@
     <h3>app-4 for demo</h3>
     <div id="app-4">
         <ul>
-            <li v-for="(item, index) in items" :key="index">
-                {{index}} {{item.name}} {{item.home}}
+            <li v-for="(item, key) in items" :key="index">
+                {{key}} {{item.name}} {{item.home}}
             </li>
 
         </ul>
@@ -120,11 +120,13 @@
     <script>
         var app = new Vue({
             el: "#app",
-            data: {
-                message: "Hello,Leo and BIlly,This is Vue world",
+            data: function () {
+                return {
+                    message1: "Hello,Leo and BIlly,This is Vue world11",
+                }
             },
             watch: {
-                message: function (newText, oldText) {
+                message1: function (newText, oldText) {
                     console.log(`${newText}:${oldText}`);
                 }
             },
