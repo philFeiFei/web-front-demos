@@ -13,7 +13,7 @@
         .stylediv {
             border: 1px solid red;
             font-Weight: bold;
-            font-size: 40px;
+            font-size: 12px;
         }
     </style>
 
@@ -30,8 +30,9 @@
         <br>
 
         <h3>----带prop的组件,与vue之间通过prop来建立联系</h3>
-        <div v-bind:style="{fontSize:blogFontsize +'px'}">
-            <blog-post v-on:enlarge-text="blogFontsize +=$event" v-for="(blog, index) in blogs" :key="index" v-bind:blog="blog">我能够进入slot中吗</blog-post>
+        <div v-bind:style="styleObj">
+            <blog-post v-on:enlarge-text="blogFontsize +=$event" v-for="(blog, index) in blogs" :key="index"
+                v-bind:blog="blog">我能够进入slot中吗</blog-post>
         </div>
 
     </div>
@@ -55,7 +56,7 @@
             template: ` 
                 <div >
                      <h3 > 文章标题是：{{ blog.title }} !!<button v-on:click="$emit('enlarge-text',3)">enlarge blog</button></h3 >
-                    <div class="stylediv" v-html="blog.contnet"> </div > 
+                    <div :class="stylediv" v-html="blog.contnet"> </div > 
                     <slot></slot>
                 </div >
                 `,
@@ -69,6 +70,10 @@
             },
             data: {
                 blogFontsize: 12,
+                styleObj: {
+                    fontSize: this.blogFontsize + 'px',
+                    color: 'red'
+                },
                 blogs: [
                     {
                         title: "小明的春天来了",

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="appDemo">
+
+        <pmoban :style-obj="styleObjP" @changecolor="changecolor" @changesize="changeToBig">
+        </pmoban>
+        当前字体大小是：<span :style="styleObjP">{{blogFontsize}}</span> PX
+        <br />
+        当前字体颜色是：<span :style="styleObjP">{{color}}</span>
+
+    </div>
+
+    <script>
+
+        Vue.component('pmoban', {
+            data() {
+                return {
+
+                }
+            },
+            methods: {
+                changecolor() {
+                    console.log("enter component changecolor")
+                    this.$emit('changecolor', 'blue');
+                }
+            },
+            props: ['styleObj'],//1，如果props中有驼峰式时，父组件传入时应该用-连接，style-obj或style-Obj  ；2，或者不用驼峰式，都用小写。
+            template: `<div>
+                
+                <input type="button" @click="changecolor()" value="蓝色色" />
+                <input type="button" @click="$emit('changecolor','green')" value="绿色" />
+                <input type="button" @click="$emit('changesize',2)" value="变大" />
+                <input type="button" @click="$emit('changesize',-2)" value="变小" />
+                <p :style="styleObj">我是一段文本啊，亲</p>
+                </div>         
+            `
+        })
+
+        var appD = new Vue({
+            el: "#appDemo",
+            data() {
+                return {
+                    blogFontsize: 28,
+                    color: 'red',
+                    /*  styleObjP: { //在这里已经不合适了，需要通过计算属性得到更好。父与子传值时。
+                         color: 'red',
+                         fontSize: blogFontsize + 'px',
+                         fontWeight: 'bold',
+                     } */
+                }
+            },
+            computed: {
+                styleObjP() {//这个属性对象其实就是通过计算得到的啦。。随意放在计算属性里面更好点。
+                    return {
+                        color: this.color,
+                        fontSize: this.blogFontsize + 'px',
+                        fontWeight: 'bold',
+                    }
+                }
+            },
+            methods: {
+                changecolor(color) {
+                    console.log("enter parent changecolor", color)
+                    this.color = color;
+                },
+                changeToBig(size) {
+                    console.log("enter parent changeToBig", this.styleObjP.fontSize)
+                    this.blogFontsize += size;
+                }
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>
